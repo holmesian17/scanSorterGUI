@@ -22,7 +22,7 @@ class SortingGui(tk.Frame):
         self.folderBox.bind("<<ListboxSelect>>", self.currentFolder)
         self.folderBox.grid(row=2, column=2)
 
-        self.imageCanvas = tk.Canvas()
+        self.imageCanvas = tk.Canvas( bg = "white")
         self.imageCanvas.grid(row=0, column=0)
 
         self.moveCurrentButton = tk.Button(self, text='Move to Current Folder', command = self.moveToCurrent)
@@ -38,6 +38,7 @@ class SortingGui(tk.Frame):
         self.changeNewspaperTitle.grid(row=4, column = 2)
 
         self.changeNewspaperDate = tk.Button(self, text = 'Change Date', command = self.changeDate)
+        self.changeNewspaperDate.grid(row = 5, column = 2)
 
         self.selectFolder = tk.Button(self, text="Select Reel", command=self.getFolder)
         self.selectFolder.grid(row=4, column=3)
@@ -94,16 +95,16 @@ class SortingGui(tk.Frame):
         #probably need to use os.path connection
 
     def createNewFolder(self):
-        print('')
+        print('New Folder')
 
     def undoMove(self):
-        print('')
+        print('Undo')
 
     def changeTitle(self):
-        print('')
+        print('Change Title')
 
     def changeDate(self):
-        print('')
+        print('Change Date')
 
 
 root = tk.Tk()
