@@ -25,25 +25,30 @@ class SortingGui(tk.Frame):
         self.imageCanvas = tk.Canvas( bg = "white")
         self.imageCanvas.grid(row=0, column=0)
 
-        self.moveCurrentButton = tk.Button(self, text='Move to Current Folder', command = self.moveToCurrent)
+        self.moveCurrentButton = tk.Button(self, text='Move to Current Folder',
+                                           command = self.moveToCurrent, underline=0)
         self.moveCurrentButton.grid(row=4, column=0)
 
-        self.newFolder = tk.Button(self, text='New Folder', command = self.createNewFolder)
+        self.newFolder = tk.Button(self, text='New Folder', command = self.createNewFolder, underline = 0)
         self.newFolder.grid(row = 4, column = 1)
 
-        self.undoLastMove = tk.Button(self, text='Undo Move', command = self.undoMove)
+        self.undoLastMove = tk.Button(self, text='Undo Move', command = self.undoMove,
+                                      underline=0)
         self.undoLastMove.grid(row = 5, column = 1)
 
-        self.changeNewspaperTitle = tk.Button(self, text = 'Change Title', command = self.changeTitle)
+        self.changeNewspaperTitle = tk.Button(self, text = 'Change Title', command = self.changeTitle,
+                                              underline = 7)
         self.changeNewspaperTitle.grid(row=4, column = 2)
 
-        self.changeNewspaperDate = tk.Button(self, text = 'Change Date', command = self.changeDate)
+        self.changeNewspaperDate = tk.Button(self, text = 'Change Date', command = self.changeDate,
+                                             underline=7)
         self.changeNewspaperDate.grid(row = 5, column = 2)
 
-        self.selectFolder = tk.Button(self, text="Select Reel", command=self.getFolder)
+        self.selectFolder = tk.Button(self, text="Select Reel", command=self.getFolder,
+                                      underline=0)
         self.selectFolder.grid(row=4, column=3)
 
-        self.close = tk.Button(self, text="Exit", command=self.master.destroy)
+        self.close = tk.Button(self, text="Exit", command=self.master.destroy, underline=1)
         self.close.grid(row=5, column=3)
 
     def getFolder(self):
