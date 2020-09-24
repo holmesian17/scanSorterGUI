@@ -1,7 +1,7 @@
 import tkinter as tk
 import os
 import sys
-from tkinter import filedialog
+from tkinter import filedialog, Radiobutton, StringVar
 
 from PIL import Image
 from PIL import ImageTk
@@ -14,6 +14,24 @@ class SortingGui(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
+
+        #popup dialog for newspaper information
+        self.infoField = tk.Label(self, text="Enter Newspaper Information")
+
+        newspaperTitle = tk.StringVar()
+        self.newspaperTitle = tk.StringVar()
+        self.titleEntry = tk.Entry(self, textvariable=newspaperTitle, text="Newspaper Title:")
+
+        # date pickerwill go here
+        issueDate = tk.StringVar()
+
+        published = tk.StringVar()
+        self.daily = Radiobutton(self, text="Daily", variable=published, value=1)
+        self.weekly = Radiobutton(self, text="Weekly", variable=published, value=2)
+        self.montly = Radiobutton(self, text="Monthly", variable=published, value=3)
+
+        #application window itself
+
         self.fileBox = tk.Listbox(self, exportselection=False)
         self.fileBox.bind("<<ListboxSelect>>", self.showContent)
         self.fileBox.grid(row = 1, column=2)
@@ -50,6 +68,10 @@ class SortingGui(tk.Frame):
 
         self.close = tk.Button(self, text="Exit", command=self.master.destroy, underline=1)
         self.close.grid(row=5, column=3)
+
+    def getNewspaperInfo(self):
+        # popup dialog to populate the variables
+        print('')
 
     def getFolder(self):
         self.fileBox.delete(0, 'end')
@@ -91,16 +113,38 @@ class SortingGui(tk.Frame):
         print(folder)
 
     def moveToCurrent(self):
+        viewedFile = self.fileBox.curselection()
+        currentFolder = self.folderBox.curselection()
+        
+
+
+        #probably need to use os.path connection
+        # need to save this movement to a variable each time so that we can tell
+        # the system to move specific file from current folder to previous folder
+        # for the undo button
+
+        '''
+        # this is the test code for the current selection mechanism
         x = self.folderBox.curselection()
         y = self.fileBox.curselection()
-        px = self.folderBox.get(x[0])
+        #px = self.folderBox.get(x[0])
         py = self.fileBox.get(y[0])
-        print(px)
+        #print(px)
         print(py)
-        #probably need to use os.path connection
+        '''
 
     def createNewFolder(self):
-        print('New Folder')
+        newFolder = str(newspaperTitle) + ',' + str(issueDate) # may also need to be
+                                                               # month + day + year
+                                                               # depending on how we format things
+                                                               # with the calendar
+        newFolder = os.path.join(self.folder, newFolder)
+        print(newFolder)
+        if not os.path.exists(newFolder):
+            os.makedirs(newFolder)
+        else:
+            os.chdir(newFolder)
+
 
     def undoMove(self):
         print('Undo')
