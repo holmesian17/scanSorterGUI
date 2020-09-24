@@ -37,7 +37,7 @@ class SortingGui(tk.Frame):
         self.fileBox.grid(row = 1, column=2)
 
         self.folderBox = tk.Listbox(self, exportselection=False)
-        self.folderBox.bind("<<ListboxSelect>>", self.currentFolder)
+        self.folderBox.bind("<<ListboxSelect>>", self.getCurrentFolder)
         self.folderBox.grid(row=2, column=2)
 
         self.imageCanvas = tk.Canvas( bg = "white")
@@ -79,6 +79,7 @@ class SortingGui(tk.Frame):
         # get the list of files
         flist = os.listdir(self.folder)
 
+        os.chdir(self.folder)
         # THE ITEMS INSERTED WITH A LOOP
         fileTypes = (".tif", ".png")
         for item in flist:
@@ -105,17 +106,39 @@ class SortingGui(tk.Frame):
         self.imageCanvas.image = img
         self.imageCanvas.create_image(20, 20, image=img)
 
-    def currentFolder(self, event):
+    def getCurrentFolder(self, event):
         widget = event.widget
         selection = widget.curselection()
-        file = widget.get(selection[0])
-        folder = self.folder
-        print(folder)
+        currentFolder = widget.get(selection[0])
+        directory = self.folder
+        currentFolder = os.path.join(directory, currentFolder)
+        print(currentFolder)
+
+
+    def createNewFolder(self):
+        # createNewFolder needs to create a new folder naming it by changing the published variable
+        # depending on what they chose for the radiobutton
+        newFolder = "testing2" #str(newspaperTitle) + ',' + str(issueDate) # may also need to be
+                                                               # month + day + year
+                                                               # depending on how we format things
+                                                               # with the calendar
+        newFolder = os.path.join(self.folder, newFolder)
+        print(newFolder)
+        if not os.path.exists(newFolder):
+            os.makedirs(newFolder)
+            os.chdir(newFolder)
+            # needs to then refresh the listbox
+            # and change the selection to the new folder
+            # will this require calling the getCurrentFolder function?
+        else:
+            os.chdir(newFolder)
+
+            # needs to select the folder in the listbox
 
     def moveToCurrent(self):
         viewedFile = self.fileBox.curselection()
         currentFolder = self.folderBox.curselection()
-        
+        # or would we invoke the getCurrentFolder function somehow???
 
 
         #probably need to use os.path connection
@@ -133,23 +156,14 @@ class SortingGui(tk.Frame):
         print(py)
         '''
 
-    def createNewFolder(self):
-        newFolder = str(newspaperTitle) + ',' + str(issueDate) # may also need to be
-                                                               # month + day + year
-                                                               # depending on how we format things
-                                                               # with the calendar
-        newFolder = os.path.join(self.folder, newFolder)
-        print(newFolder)
-        if not os.path.exists(newFolder):
-            os.makedirs(newFolder)
-        else:
-            os.chdir(newFolder)
+
 
 
     def undoMove(self):
         print('Undo')
 
     def changeTitle(self):
+        # self.newspaperTitle = what's in the fucking box!?
         print('Change Title')
 
     def changeDate(self):
