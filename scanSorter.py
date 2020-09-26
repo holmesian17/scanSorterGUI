@@ -1,7 +1,7 @@
 import tkinter as tk
 import os
 import sys
-from tkinter import filedialog, Radiobutton, StringVar, ttk
+from tkinter import filedialog, Radiobutton, StringVar
 import random
 
 from PIL import Image
