@@ -9,6 +9,7 @@ from PIL import ImageTk
 
 global newspaperTitle
 global issueDate
+global currentFolderName
 
 class SortingGui(tk.Frame):
     def __init__(self, master=None):
@@ -16,6 +17,7 @@ class SortingGui(tk.Frame):
         self.master = master
         self.grid(column=9)
         self.create_widgets()
+
 
 
     def create_widgets(self):
@@ -225,7 +227,7 @@ class SortingGui(tk.Frame):
     def createNewFolder(self):
         # createNewFolder needs to create a new folder naming it by changing the published variable
         # depending on what they chose for the radiobutton
-        newFolder = "testing2" #str(newspaperTitle) + ',' + str(issueDate) # may also need to be
+        newFolder = self.newspaperTitle.get() + ', ' + self.issueDate.get() # may also need to be
                                                                # month + day + year
                                                                # depending on how we format things
                                                                # with the calendar
