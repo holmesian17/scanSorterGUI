@@ -4,12 +4,20 @@ import sys
 from tkinter import filedialog, Radiobutton, StringVar
 import random
 
+import datetime
+import calendar
+import tkcalendar
+
 from PIL import Image
 from PIL import ImageTk
 
 global newspaperTitle
 global issueDate
 global currentFolderName
+global published
+global daily
+global weekly
+global monthly
 
 class SortingGui(tk.Frame):
     def __init__(self, master=None):
@@ -33,24 +41,24 @@ class SortingGui(tk.Frame):
         self.issueDate = tk.StringVar()
 
 
-        published = tk.StringVar()
-        self.daily = Radiobutton(self, text="Daily", variable=published, value=1)
-        self.weekly = Radiobutton(self, text="Weekly", variable=published, value=2)
-        self.montly = Radiobutton(self, text="Monthly", variable=published, value=3)
+        self.published = tk.StringVar()
+        #self.daily = Radiobutton(self, text="Daily", variable=published, value=1)
+        #self.weekly = Radiobutton(self, text="Weekly", variable=published, value=2)
+        #self.montly = Radiobutton(self, text="Monthly", variable=published, value=3)
 
         #application window itself
 
         self.fileLabel = tk.Label(self, text="Files")
         self.fileLabel.grid(row=0, column=5)
 
-        self.fileBox = tk.Listbox(self, exportselection=False)
+        self.fileBox = tk.Listbox(self, exportselection=False, width=50)
         self.fileBox.bind("<<ListboxSelect>>", self.showContent)
         self.fileBox.grid(row = 1, column=5)
 
         self.folderLabel = tk.Label(self, text="Folders")
         self.folderLabel.grid(row=2, column=5)
 
-        self.folderBox = tk.Listbox(self, exportselection=False)
+        self.folderBox = tk.Listbox(self, exportselection=False, width=50)
         self.folderBox.bind("<<ListboxSelect>>", self.getCurrentFolder)
         self.folderBox.grid(row=3, column=5)
 
@@ -82,6 +90,10 @@ class SortingGui(tk.Frame):
                                              underline=7)
         self.changeNewspaperDate.grid(row = 5, column = 3)
 
+        self.changeRepeatingButton = tk.Button(self, text = 'Change Repeating', command = self.changeRepeating,
+                                                 underline=7)
+        self.changeRepeatingButton.grid(row=6, column=3)
+
         self.selectFolder = tk.Button(self, text="Select Reel", command=self.getFolder,
                                       underline=0)
         self.selectFolder.grid(row=4, column=5)
@@ -89,8 +101,8 @@ class SortingGui(tk.Frame):
         self.close = tk.Button(self, text="Exit", command=self.master.destroy, underline=1)
         self.close.grid(row=5, column=5)
 
-        self.imageCanvas = tk.Canvas(self.master, highlightthickness=0)
-        self.imageCanvas.grid(row=0, column=0, sticky='nswe')
+        self.imageCanvas = tk.Canvas(self.master, highlightthickness=0, width=800, height=800)
+        self.imageCanvas.grid(row=0, column=0, sticky='nswe', columnspan=2, rowspan=10)
         self.imageCanvas.update()  # wait till canvas is created
 
         self.imageCanvas.bind('<ButtonPress-1>', self.move_from)
@@ -225,12 +237,35 @@ class SortingGui(tk.Frame):
 
 
     def createNewFolder(self):
+        def add_months(sourcedate, months):
+            month = sourcedate.month - 1 + months
+            year = sourcedate.year + month // 12
+            month = month % 12 + 1
+            day = min(sourcedate.day, calendar.monthrange(year, month)[1])
+            return datetime.date(year, month, day)
+
         # createNewFolder needs to create a new folder naming it by changing the published variable
         # depending on what they chose for the radiobutton
-        newFolder = self.newspaperTitle.get() + ', ' + self.issueDate.get() # may also need to be
+        if self.daily = True: # or whatever value indicates this is the case
+            upADay = datetime.timedelta(days=1)
+            self.issueDate = self.issueDate + upADay
+            newFolder = self.newspaperTitle.get() + ', ' + self.issueDate.get() # may also need to be
                                                                # month + day + year
                                                                # depending on how we format things
                                                                # with the calendar
+        elif self.weekly = True:
+            upAWeek = datetime.timedelta(days=7)
+            self.issueDate = self.issueDate + upAWeek
+            newFolder = self.newspaperTitle.get() + ', ' + self.issueDate.get()  # may also need to be
+            # month + day + year
+            # depending on how we format things
+            # with the calendar
+
+        elif self.monthly = True:
+            issueDate = add_months(issueDate, 1)
+
+        elif self.monthly
+
         newFolder = os.path.join(self.folder, newFolder)
         print(newFolder)
         if not os.path.exists(newFolder):
@@ -283,6 +318,11 @@ class SortingGui(tk.Frame):
 
         self.newspaperTitle = tk.StringVar()
         self.issueDate = tk.StringVar()
+
+        self.published = tk.StringVar()
+        self.daily = Radiobutton(self, text="Daily", variable=published, value=1)
+        self.weekly = Radiobutton(self, text="Weekly", variable=published, value=2)
+        self.montly = Radiobutton(self, text="Monthly", variable=published, value=3)
 
         titleLabel = tk.Label(comboWindow, text='Title',
                               font=('calibre',
@@ -352,13 +392,49 @@ class SortingGui(tk.Frame):
                               font=('calibre',
                                     10, 'bold'))
         issueLabel.grid()
+
         issueEntry = tk.Entry(issueWindow,
                               textvariable=self.issueDate, font=('calibre', 10, 'normal'))
         issueEntry.grid()
+
         issueSubmit = tk.Button(issueWindow, text='Submit',
                                 command=self.issueSubmit)
         issueSubmit.grid()
 
+    def publishedSubmit(self):
+        published = self.published.get()
+
+        print(published)
+
+    def changeRepeating(self):
+        publishedWindow = tk.Toplevel(app)
+        publishedWindow.title("Change Recurrance")
+        publishedWindow.geometry("600x300")
+
+        self.published = tk.StringVar()
+
+        publishedLabel = tk.Label(publishedWindow, text="Recurs", font=('calibre',
+                                    10, 'bold'))
+        publishedLabel.grid()
+
+        daily = Radiobutton(self, text="Daily", variable=self.published, value=1)
+        weekly = Radiobutton(self, text="Weekly", variable=self.published, value=2)
+        montly = Radiobutton(self, text="Monthly", variable=self.published, value=3)
+
+        daily.grid(row=1, column=0)
+        weekly.grid(row=1, column=1)
+        monthly.grid(row=1, column=2)
+
+        '''
+        publishedEntry = tk.Entry(publishedWindow,
+                              textvariable=self.published, font=('calibre', 10, 'normal'))
+        publishedEntry.grid()
+        '''
+        publishedSubmit = tk.Button(publishedWindow, text='Submit',
+                                command=self.publishedSubmit())
+        publishedSubmit.grid()
 root = tk.Tk()
+root.geometry("1400x900")
 app = SortingGui(master=root)
+
 app.mainloop()
