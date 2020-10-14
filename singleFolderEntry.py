@@ -36,7 +36,7 @@ class SortingGui(tk.Frame):
         # self.titleEntry = tk.Entry(self, textvariable=newspaperTitle, text="Newspaper Title:")
 
         # date pickerwill go here
-        self.issueDate = tk.StringVar()
+        # self.issueDate = tk.StringVar()
 
         # self.published = tk.StringVar()
 
@@ -241,54 +241,7 @@ class SortingGui(tk.Frame):
         print(issue)
 
     def createNewFolder(self):
-        '''
-        def add_months(sourcedate, months):
-            month = sourcedate.month - 1 + months
-            year = sourcedate.year + month // 12
-            month = month % 12 + 1
-            day = min(sourcedate.day, calendar.monthrange(year, month)[1])
-            return datetime.date(year, month, day)
-
-        # createNewFolder needs to create a new folder naming it by changing the published variable
-        # depending on what they chose for the radiobutton
-        if self.daily = True: # or whatever value indicates this is the case
-            upADay = datetime.timedelta(days=1)
-            self.issueDate = self.issueDate + upADay
-            newFolder = self.newspaperTitle.get() + ', ' + self.issueDate.get() # may also need to be
-                                                               # month + day + year
-                                                               # depending on how we format things
-                                                               # with the calendar
-        elif self.weekly = True:
-            upAWeek = datetime.timedelta(days=7)
-            self.issueDate = self.issueDate + upAWeek
-            newFolder = self.newspaperTitle.get() + ', ' + self.issueDate.get()  # may also need to be
-            # month + day + year
-            # depending on how we format things
-            # with the calendar
-
-        elif self.monthly = True:
-            issueDate = add_months(issueDate, 1)
-
-        elif self.monthly
-        '''
-        issueWindow = tk.Toplevel(app)
-
-        issueWindow.title("Change Newspaper Date")
-        issueWindow.geometry("600x300")
-
-        self.issueDate = tk.StringVar()
-
-        issueLabel = tk.Label(issueWindow, text='Issue Date',
-                              font=('calibre',
-                                    10, 'bold'))
-        issueLabel.grid()
-
-        issueEntry = tk.Entry(issueWindow, textvariable=self.issueDate, font=('calibre', 10, 'normal'))
-        issueEntry.grid()
-
-        issueSubmit = tk.Button(issueWindow, text='Submit',
-                                command=self.issueSubmit)
-        issueSubmit.grid()
+        titleEntry()
 
         newFolder = self.newspaperTitle + ", " + self.issueDate
 
@@ -402,69 +355,6 @@ class SortingGui(tk.Frame):
                                 command=self.titleSubmit)
         titleSubmit.grid()
 
-
-'''
-    def issueSubmit(self):
-        issue = self.issueDate.get()
-
-        print(issue)
-
-        issueWindow.destroy()
-        #title.set("")
-
-    def changeDate(self):
-        issueWindow = tk.Toplevel(app)
-
-        issueWindow.title("Change Newspaper Date")
-        issueWindow.geometry("600x300")
-
-        self.issueDate = tk.StringVar()
-
-        issueLabel = tk.Label(issueWindow, text='Title',
-                              font=('calibre',
-                                    10, 'bold'))
-        issueLabel.grid()
-
-        issueEntry = tk.Entry(issueWindow, textvariable=self.issueDate, font=('calibre', 10, 'normal'))
-        issueEntry.grid()
-
-        issueSubmit = tk.Button(issueWindow, text='Submit',
-                                command=self.issueSubmit)
-        issueSubmit.grid()
-        '''
-'''
-    def publishedSubmit(self):
-        published = self.published.get()
-
-        print(published)
-
-    def changeRepeating(self):
-        publishedWindow = tk.Toplevel(app)
-        publishedWindow.title("Change Recurrance")
-        publishedWindow.geometry("600x300")
-
-        self.published = tk.StringVar()
-
-        publishedLabel = tk.Label(publishedWindow, text="Recurs", font=('calibre',
-                                    10, 'bold'))
-        publishedLabel.grid()
-
-        daily = Radiobutton(self, text="Daily", variable=self.published, value=1)
-        weekly = Radiobutton(self, text="Weekly", variable=self.published, value=2)
-        montly = Radiobutton(self, text="Monthly", variable=self.published, value=3)
-
-        daily.grid(row=1, column=0)
-        weekly.grid(row=1, column=1)
-        monthly.grid(row=1, column=2)
-
-        publishedEntry = tk.Entry(publishedWindow,
-                              textvariable=self.published, font=('calibre', 10, 'normal'))
-        publishedEntry.grid()
-
-        publishedSubmit = tk.Button(publishedWindow, text='Submit',
-                                command=self.publishedSubmit())
-        publishedSubmit.grid()
-    '''
 root = tk.Tk()
 root.geometry("1400x900")
 app = SortingGui(master=root)
