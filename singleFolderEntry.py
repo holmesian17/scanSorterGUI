@@ -18,6 +18,7 @@ global published
 global daily
 global weekly
 global monthly
+global newFolder
 
 
 class SortingGui(tk.Frame):
@@ -36,7 +37,8 @@ class SortingGui(tk.Frame):
         # self.titleEntry = tk.Entry(self, textvariable=newspaperTitle, text="Newspaper Title:")
 
         # date pickerwill go here
-        # self.issueDate = tk.StringVar()
+        self.issueDate = tk.StringVar()
+
 
         # self.published = tk.StringVar()
 
@@ -70,17 +72,17 @@ class SortingGui(tk.Frame):
         titleAndDate.set(str(self.newspaperTitle) + ', ' + str(self.issueDate))
         self.currentIssueFolder.grid(row=5, column=0)
         '''
-        self.newFolder = tk.Button(self, text='New Folder', command=self.createNewFolder, underline=0)
-        self.newFolder.grid(row=4, column=2)
+        self.createFolder = tk.Button(self, text='New Folder', command=self.createNewFolder, underline=0)
+        self.createFolder.grid(row=4, column=2)
 
         self.undoLastMove = tk.Button(self, text='Undo Move', command=self.undoMove,
                                       underline=0)
         self.undoLastMove.grid(row=5, column=2)
-
+        '''
         self.changeNewspaperTitle = tk.Button(self, text='Change Title', command=self.titleEntry,
                                               underline=7)
         self.changeNewspaperTitle.grid(row=4, column=3)
-        '''
+        
         self.comboSet = tk.Button(self, text='Set Title and Issue', command=self.comboEntry,
                                               underline=7)
         self.comboSet.grid(row=0, column=0)
@@ -235,28 +237,52 @@ class SortingGui(tk.Frame):
         currentFolder = os.path.join(directory, currentFolder)
         print(currentFolder)
 
-    def issueSubmit(self):
-        issue = self.issueDate.get()
-
-        print(issue)
-
     def createNewFolder(self):
-        titleEntry()
+        issueWindow = tk.Toplevel(app)
 
-        newFolder = self.newspaperTitle + ", " + self.issueDate
+        issueWindow.title("New Folder")
+        issueWindow.geometry("600x300")
 
-        print(newFolder)
+        issueDate = tk.StringVar(self)
 
-        newFolder = os.path.join(self.folder, newFolder)
-        print(newFolder)
-        if not os.path.exists(newFolder):
-            os.makedirs(newFolder)
-            os.chdir(newFolder)
-            # needs to then refresh the listbox
-            # and change the selection to the new folder
-            # will this require calling the getCurrentFolder function?
-        else:
-            os.chdir(newFolder)
+        def issueSubmit():
+            issue=issueDate.get()
+            print(issue)
+
+            folder = os.getcwd()
+            print(folder + " folder")
+            newFolder = os.path.join(folder, str(issue))
+            print(newFolder)
+            if not os.path.exists(newFolder):
+                os.makedirs(newFolder)
+                os.chdir(newFolder)
+                # needs to then refresh the listbox
+                # and change the selection to the new folder
+                # will this require calling the getCurrentFolder function?
+                print("created")
+            else:
+                os.chdir(newFolder)
+                print("changed")
+                print(os.getcwd())
+
+        issueLabel = tk.Label(issueWindow, text='Folder name',
+                              font=('calibre',
+                                    10, 'bold'))
+
+        issueEntry = tk.Entry(issueWindow, textvariable=issueDate, font=('calibre', 10, 'normal'))
+
+        issueSubmit = tk.Button(issueWindow, text='Submit',
+                                command=issueSubmit)
+        issueEntry.grid()
+        issueLabel.grid()
+        issueSubmit.grid()
+        #self.newFolder = self.issueDate.get()
+        #newFolder = self.newspaperTitle + ", " + self.issueDate
+
+        # print(newFolder + 'test')
+
+        #print(issueDate.get())
+
 
             # needs to select the folder in the listbox
 
@@ -283,59 +309,13 @@ class SortingGui(tk.Frame):
     def undoMove(self):
         print(self.newspaperTitle.get())
 
-    '''
-    def comboSubmit(self):
-        title = self.newspaperTitle.get()
-        issue = self.issueDate.get()
-
-        print(title + ", " + issue)
-
-    def comboEntry(self):
-        comboWindow = tk.Toplevel(app)
-
-        comboWindow.title("Enter Newspaper Information")
-        comboWindow.geometry("600x300")
-
-        self.newspaperTitle = tk.StringVar()
-        self.issueDate = tk.StringVar()
-
-        self.published = tk.StringVar()
-        self.daily = Radiobutton(self, text="Daily", variable=published, value=1)
-        self.weekly = Radiobutton(self, text="Weekly", variable=published, value=2)
-        self.montly = Radiobutton(self, text="Monthly", variable=published, value=3)
-
-        titleLabel = tk.Label(comboWindow, text='Title',
-                              font=('calibre',
-                                    10, 'bold'))
-
-        issueLabel = tk.Label(comboWindow, text='Issue Date',
-                              font=('calibre',
-                                    10, 'bold'))
-
-        titleEntry = tk.Entry(comboWindow,
-                              textvariable=self.newspaperTitle, font=('calibre', 10, 'normal'))
-
-        issueEntry = tk.Entry(comboWindow,
-                              textvariable=self.issueDate, font=('calibre', 10, 'normal'))
-        titleLabel.grid(column=0, row=0)
-        titleEntry.grid(column=1, row=0)
-        issueLabel.grid(column=0, row=1)
-        issueEntry.grid(column=1, row=1)
-
-        comboSubmit = tk.Button(comboWindow, text='Submit',
-                                command=self.comboSubmit)
-        comboSubmit.grid(column=0, row=2)
-    '''
-
     def titleSubmit(self):
         title = self.newspaperTitle.get()
 
         print(title)
 
-        titleWindow.destroy()
-
         # title.set("")
-
+    '''
     def titleEntry(self):
         titleWindow = tk.Toplevel(app)
 
@@ -354,6 +334,36 @@ class SortingGui(tk.Frame):
         titleSubmit = tk.Button(titleWindow, text='Submit',
                                 command=self.titleSubmit)
         titleSubmit.grid()
+
+
+
+    def issueSubmit(self):
+        issue = self.issueDate.get()
+
+        print(issue)
+
+        #title.set("")
+
+    def changeDate(self):
+        issueWindow = tk.Toplevel(app)
+
+        issueWindow.title("Change Newspaper Date")
+        issueWindow.geometry("600x300")
+
+        self.issueDate = tk.StringVar()
+
+        issueLabel = tk.Label(issueWindow, text='Title',
+                              font=('calibre',
+                                    10, 'bold'))
+        issueLabel.grid()
+
+        issueEntry = tk.Entry(issueWindow, textvariable=self.issueDate, font=('calibre', 10, 'normal'))
+        issueEntry.grid()
+
+        issueSubmit = tk.Button(issueWindow, text='Submit',
+                                command=self.issueSubmit)
+        issueSubmit.grid()
+    '''
 
 root = tk.Tk()
 root.geometry("1400x900")
