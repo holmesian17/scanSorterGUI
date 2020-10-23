@@ -303,7 +303,8 @@ class SortingGui(tk.Frame):
         os.rename(filePath, movedFilePath)
         shutil.move(filePath, movedFilePath)
         os.replace(filePath, movedFilePath)
-        
+        #### self.folderBox.insert(tk.END, name)
+
         '''
         print(selectedFolder)
         print(folder)
