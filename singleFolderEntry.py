@@ -3,6 +3,7 @@ import os
 import sys
 from tkinter import filedialog, Radiobutton, StringVar
 import random
+import shutil
 
 import datetime
 import calendar
@@ -11,14 +12,7 @@ import tkcalendar
 from PIL import Image
 from PIL import ImageTk
 
-global newspaperTitle
-global issueDate
-global currentFolderName
-global published
-global daily
-global weekly
-global monthly
-global newFolder
+
 
 
 class SortingGui(tk.Frame):
@@ -36,17 +30,7 @@ class SortingGui(tk.Frame):
         self.newspaperTitle = tk.StringVar()
         # self.titleEntry = tk.Entry(self, textvariable=newspaperTitle, text="Newspaper Title:")
 
-        # date pickerwill go here
         self.issueDate = tk.StringVar()
-
-
-        # self.published = tk.StringVar()
-
-        # self.daily = Radiobutton(self, text="Daily", variable=published, value=1)
-        # self.weekly = Radiobutton(self, text="Weekly", variable=published, value=2)
-        # self.montly = Radiobutton(self, text="Monthly", variable=published, value=3)
-
-        # application window itself
 
         self.fileLabel = tk.Label(self, text="Files")
         self.fileLabel.grid(row=0, column=5)
@@ -66,35 +50,16 @@ class SortingGui(tk.Frame):
                                            command=self.moveToCurrent, underline=0)
         self.moveCurrentButton.grid(row=4, column=0)
 
-        '''
-        titleAndDate = StringVar()
-        self.currentIssueFolder = tk.Label(self, textvariable=titleAndDate)
-        titleAndDate.set(str(self.newspaperTitle) + ', ' + str(self.issueDate))
-        self.currentIssueFolder.grid(row=5, column=0)
-        '''
+        self.flagImageForReScan = tk.Button(self, text='Flag this photo for rescanning', underline=0)
+        self.flagImageForReScan.grid(row=5, column=0)
+
         self.createFolder = tk.Button(self, text='New Folder', command=self.createNewFolder, underline=0)
         self.createFolder.grid(row=4, column=2)
 
         self.undoLastMove = tk.Button(self, text='Undo Move', command=self.undoMove,
                                       underline=0)
         self.undoLastMove.grid(row=5, column=2)
-        '''
-        self.changeNewspaperTitle = tk.Button(self, text='Change Title', command=self.titleEntry,
-                                              underline=7)
-        self.changeNewspaperTitle.grid(row=4, column=3)
-        
-        self.comboSet = tk.Button(self, text='Set Title and Issue', command=self.comboEntry,
-                                              underline=7)
-        self.comboSet.grid(row=0, column=0)
 
-        self.changeNewspaperDate = tk.Button(self, text = 'Change Date', command = self.changeDate,
-                                             underline=7)
-        self.changeNewspaperDate.grid(row = 5, column = 3)
-
-        self.changeRepeatingButton = tk.Button(self, text = 'Change Repeating', command = self.changeRepeating,
-                                                 underline=7)
-        self.changeRepeatingButton.grid(row=6, column=3)
-        '''
         self.selectFolder = tk.Button(self, text="Select Reel", command=self.getFolder,
                                       underline=0)
         self.selectFolder.grid(row=4, column=5)
@@ -179,10 +144,17 @@ class SortingGui(tk.Frame):
         # popup dialog to populate the variables
         print('')
 
-    def getFolder(self):
+    def reelSelect(self):
+        global folder
         self.fileBox.delete(0, 'end')
         self.folder = filedialog.askdirectory(initialdir="/", title="Select a Folder")
+
+    def getFolder(self):
+        # self.fileBox.delete(0, 'end')
+        # self.folder = filedialog.askdirectory(initialdir="/", title="Select a Folder")
         # get the list of files
+        global folder
+        self.reelSelect()
         flist = os.listdir(self.folder)
 
         os.chdir(self.folder)
@@ -197,7 +169,15 @@ class SortingGui(tk.Frame):
                 self.folderBox.insert(tk.END, item)
             else:
                 continue
+        print(flist)
 
+    def populateListBox(self):
+        flist = os.listdir(self.folder)
+
+        os.chdir(self.folder)
+        # THE ITEMS INSERTED WITH A LOOP
+        isFolder = os.path.join(self.folder, self.newFolder)
+        self.folderBox.insert(tk.END, item)
         print(flist)
 
     def showContent(self, event):
@@ -236,46 +216,57 @@ class SortingGui(tk.Frame):
         directory = self.folder
         currentFolder = os.path.join(directory, currentFolder)
         print(currentFolder)
+        # root.after(100, self.getCurrentFolder())
 
     def createNewFolder(self):
-        issueWindow = tk.Toplevel(app)
+        folderWindow = tk.Toplevel(app)
 
-        issueWindow.title("New Folder")
-        issueWindow.geometry("600x300")
+        folderWindow.title("New Folder")
+        folderWindow.geometry("600x300")
 
-        issueDate = tk.StringVar(self)
+        folderName = tk.StringVar(self)
 
-        def issueSubmit():
-            issue=issueDate.get()
-            print(issue)
+        def folderSubmit():
+            name=folderName.get()
+            print(name)
 
             folder = os.getcwd()
             print(folder + " folder")
-            newFolder = os.path.join(folder, str(issue))
+            newFolder = os.path.join(folder, str(name))
             print(newFolder)
             if not os.path.exists(newFolder):
+                flist = os.listdir(folder)
+
                 os.makedirs(newFolder)
+
+                os.chdir(self.folder)
+                # THE ITEMS INSERTED WITH A LOOP
+                self.folderBox.insert(tk.END, name)
+                print(flist)
+
                 os.chdir(newFolder)
                 # needs to then refresh the listbox
                 # and change the selection to the new folder
                 # will this require calling the getCurrentFolder function?
                 print("created")
+
             else:
                 os.chdir(newFolder)
                 print("changed")
                 print(os.getcwd())
 
-        issueLabel = tk.Label(issueWindow, text='Folder name',
+
+        folderLabel = tk.Label(folderWindow, text='Folder name',
                               font=('calibre',
                                     10, 'bold'))
 
-        issueEntry = tk.Entry(issueWindow, textvariable=issueDate, font=('calibre', 10, 'normal'))
+        folderEntry = tk.Entry(folderWindow, textvariable=folderName, font=('calibre', 10, 'normal'))
 
-        issueSubmit = tk.Button(issueWindow, text='Submit',
-                                command=issueSubmit)
-        issueEntry.grid()
-        issueLabel.grid()
-        issueSubmit.grid()
+        folderSubmit = tk.Button(folderWindow, text='Submit',
+                                command=folderSubmit)
+        folderEntry.grid()
+        folderLabel.grid()
+        folderSubmit.grid()
         #self.newFolder = self.issueDate.get()
         #newFolder = self.newspaperTitle + ", " + self.issueDate
 
@@ -296,14 +287,28 @@ class SortingGui(tk.Frame):
         # the system to move specific file from current folder to previous folder
         # for the undo button
 
-        '''
+
         # this is the test code for the current selection mechanism
         x = self.folderBox.curselection()
         y = self.fileBox.curselection()
-        #px = self.folderBox.get(x[0])
+        px = self.folderBox.get(x[0])
+        folder = self.folder
         py = self.fileBox.get(y[0])
+        filePath = os.path.join(folder, py)
+        selectedFolder = px
+        folderPath = os.path.join(folder, px)
+        movedFilePath = os.path.join(folderPath, py)
         #print(px)
-        print(py)
+        #print(py)
+        os.rename(filePath, movedFilePath)
+        shutil.move(filePath, movedFilePath)
+        os.replace(filePath, movedFilePath)
+        
+        '''
+        print(selectedFolder)
+        print(folder)
+        print(file)
+        print(movedFolderPath)
         '''
 
     def undoMove(self):
@@ -314,56 +319,6 @@ class SortingGui(tk.Frame):
 
         print(title)
 
-        # title.set("")
-    '''
-    def titleEntry(self):
-        titleWindow = tk.Toplevel(app)
-
-        titleWindow.title("Enter Newspaper Title")
-        titleWindow.geometry("600x300")
-
-        self.newspaperTitle = tk.StringVar()
-
-        titleLabel = tk.Label(titleWindow, text='Title',
-                              font=('calibre',
-                                    10, 'bold'))
-        titleLabel.grid()
-        titleEntry = tk.Entry(titleWindow,
-                              textvariable=self.newspaperTitle, font=('calibre', 10, 'normal'))
-        titleEntry.grid()
-        titleSubmit = tk.Button(titleWindow, text='Submit',
-                                command=self.titleSubmit)
-        titleSubmit.grid()
-
-
-
-    def issueSubmit(self):
-        issue = self.issueDate.get()
-
-        print(issue)
-
-        #title.set("")
-
-    def changeDate(self):
-        issueWindow = tk.Toplevel(app)
-
-        issueWindow.title("Change Newspaper Date")
-        issueWindow.geometry("600x300")
-
-        self.issueDate = tk.StringVar()
-
-        issueLabel = tk.Label(issueWindow, text='Title',
-                              font=('calibre',
-                                    10, 'bold'))
-        issueLabel.grid()
-
-        issueEntry = tk.Entry(issueWindow, textvariable=self.issueDate, font=('calibre', 10, 'normal'))
-        issueEntry.grid()
-
-        issueSubmit = tk.Button(issueWindow, text='Submit',
-                                command=self.issueSubmit)
-        issueSubmit.grid()
-    '''
 
 root = tk.Tk()
 root.geometry("1400x900")
