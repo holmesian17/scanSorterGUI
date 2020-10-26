@@ -169,6 +169,8 @@ class SortingGui(tk.Frame):
                 self.folderBox.insert(tk.END, item)
             else:
                 continue
+        self.fileBox.select_set(0)  # This only sets focus on the first item.
+        self.fileBox.event_generate("<<ListboxSelect>>")
         print(flist)
 
     def populateListBox(self):
@@ -305,6 +307,8 @@ class SortingGui(tk.Frame):
         #shutil.move(filePath, movedFilePath)
         #os.replace(filePath, movedFilePath)
         self.fileBox.delete(self.fileBox.curselection())
+        self.fileBox.select_set(0)  # This only sets focus on the first item.
+        self.fileBox.event_generate("<<ListboxSelect>>")
         #### self.folderBox.insert(tk.END, name)
 
         '''
