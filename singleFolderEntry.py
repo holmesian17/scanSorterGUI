@@ -3,7 +3,6 @@ import os
 import sys
 from tkinter import filedialog, Radiobutton, StringVar
 import random
-import shutil
 
 import datetime
 import calendar
@@ -324,6 +323,8 @@ class SortingGui(tk.Frame):
 
     def undoMove(self):
         print(self.newspaperTitle.get())
+        # os.rename(self.movedFilePath, self.filePath)
+
 
     def titleSubmit(self):
         title = self.newspaperTitle.get()
