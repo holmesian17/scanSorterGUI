@@ -298,11 +298,13 @@ class SortingGui(tk.Frame):
         selectedFolder = px
         folderPath = os.path.join(folder, px)
         movedFilePath = os.path.join(folderPath, py)
+
         #print(px)
         #print(py)
         os.rename(filePath, movedFilePath)
-        shutil.move(filePath, movedFilePath)
-        os.replace(filePath, movedFilePath)
+        #shutil.move(filePath, movedFilePath)
+        #os.replace(filePath, movedFilePath)
+        self.fileBox.delete(self.fileBox.curselection())
         #### self.folderBox.insert(tk.END, name)
 
         '''
