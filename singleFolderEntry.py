@@ -194,7 +194,7 @@ class SortingGui(tk.Frame):
         # self.imageCanvas.create_image(20, 20, image=img)
         self.image = Image.open(file)  # open image
         self.width, self.height = self.image.size
-        self.imscale = 1.0  # scale for the canvaas image
+        self.imscale = 0.5  # scale for the canvaas image
         self.delta = 1.3  # zoom magnitude
         # Put image into container rectangle and use it to set proper coordinates to the image
         self.container = self.imageCanvas.create_rectangle(0, 0, self.width, self.height, width=0)
@@ -244,6 +244,10 @@ class SortingGui(tk.Frame):
                 os.chdir(self.folder)
                 # THE ITEMS INSERTED WITH A LOOP
                 self.folderBox.insert(tk.END, name)
+                self.folderBox.selection_clear("end")
+                self.folderBox.selection_set("end")
+                self.folderBox.see("end")
+
                 print(flist)
 
                 os.chdir(newFolder)
