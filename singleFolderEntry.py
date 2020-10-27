@@ -47,10 +47,11 @@ class SortingGui(tk.Frame):
 
         self.moveCurrentButton = tk.Button(self, text='Move to Current Folder',
                                            command=self.moveToCurrent, underline=0)
+        # self.bind('Control-m',self.moveToCurrent)
         self.moveCurrentButton.grid(row=4, column=0)
 
-        self.flagImageForReScan = tk.Button(self, text='Flag this photo for rescanning', underline=0)
-        self.flagImageForReScan.grid(row=5, column=0)
+        # self.flagImageForReScan = tk.Button(self, text='Flag this photo for rescanning', underline=0)
+        # self.flagImageForReScan.grid(row=5, column=0)
 
         self.createFolder = tk.Button(self, text='New Folder', command=self.createNewFolder, underline=0)
         self.createFolder.grid(row=4, column=2)
@@ -66,7 +67,7 @@ class SortingGui(tk.Frame):
         self.close = tk.Button(self, text="Exit", command=self.master.destroy, underline=1)
         self.close.grid(row=5, column=5)
 
-        self.imageCanvas = tk.Canvas(self.master, highlightthickness=0, width=800, height=800)
+        self.imageCanvas = tk.Canvas(self.master, highlightthickness=0, width=600, height=800)
         self.imageCanvas.grid(row=0, column=0, sticky='nswe', columnspan=2, rowspan=10)
         self.imageCanvas.update()  # wait till canvas is created
 
@@ -138,10 +139,6 @@ class SortingGui(tk.Frame):
                                                     anchor='nw', image=imagetk)
             self.imageCanvas.lower(imageid)  # set image into background
             self.imageCanvas.imagetk = imagetk  # keep an extra reference to prevent garbage-collectio
-
-    def getNewspaperInfo(self):
-        # popup dialog to populate the variables
-        print('')
 
     def reelSelect(self):
         global folder
@@ -223,7 +220,7 @@ class SortingGui(tk.Frame):
         folderWindow = tk.Toplevel(app)
 
         folderWindow.title("New Folder")
-        folderWindow.geometry("600x300")
+        folderWindow.geometry("400x100")
 
         folderName = tk.StringVar(self)
 
@@ -261,17 +258,15 @@ class SortingGui(tk.Frame):
                 print(os.getcwd())
 
 
-        folderLabel = tk.Label(folderWindow, text='Folder name',
-                              font=('calibre',
-                                    10, 'bold'))
+        folderLabel = tk.Label(folderWindow, text='Folder name', font=('calibre', 14, 'bold'))
 
-        folderEntry = tk.Entry(folderWindow, textvariable=folderName, font=('calibre', 10, 'normal'))
+        folderEntry = tk.Entry(folderWindow, textvariable=folderName, font=('calibre', 20, 'normal'))
 
         folderSubmit = tk.Button(folderWindow, text='Submit',
-                                command=folderSubmit)
-        folderEntry.grid()
-        folderLabel.grid()
-        folderSubmit.grid()
+                                command=folderSubmit, height=1)
+        folderEntry.grid(row=1, column=0, sticky='nswe')
+        folderLabel.grid(row=0, column=0, sticky='nswe')
+        folderSubmit.grid(row=2, column=0, sticky='nswe')
         #self.newFolder = self.issueDate.get()
         #newFolder = self.newspaperTitle + ", " + self.issueDate
 
