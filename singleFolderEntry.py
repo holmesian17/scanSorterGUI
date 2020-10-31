@@ -4,9 +4,9 @@ import sys
 from tkinter import filedialog, Radiobutton, StringVar
 import random
 
-import datetime
-import calendar
-import tkcalendar
+# import datetime
+# import calendar
+# import tkcalendar
 
 from PIL import Image
 from PIL import ImageTk
@@ -31,41 +31,41 @@ class SortingGui(tk.Frame):
 
         self.issueDate = tk.StringVar()
 
-        self.fileLabel = tk.Label(self, text="Files")
+        self.fileLabel = tk.Label(self, text="Files", font=("Helvetica", 16))
         self.fileLabel.grid(row=0, column=5)
 
         self.fileBox = tk.Listbox(self, exportselection=False, width=50)
         self.fileBox.bind("<<ListboxSelect>>", self.showContent)
-        self.fileBox.grid(row=1, column=5)
+        self.fileBox.grid(row=1, column=5, padx=30, rowspan=2)
 
-        self.folderLabel = tk.Label(self, text="Folders")
-        self.folderLabel.grid(row=2, column=5)
+        self.folderLabel = tk.Label(self, text="Folders", font=("Helvetica", 16))
+        self.folderLabel.grid(row=3, column=5, padx=30)
 
         self.folderBox = tk.Listbox(self, exportselection=False, width=50)
         self.folderBox.bind("<<ListboxSelect>>", self.getCurrentFolder)
-        self.folderBox.grid(row=3, column=5)
+        self.folderBox.grid(row=4, column=5)
 
         self.moveCurrentButton = tk.Button(self, text='Move to Current Folder',
                                            command=self.moveToCurrent, underline=0)
         # self.bind('Control-m',self.moveToCurrent)
-        self.moveCurrentButton.grid(row=4, column=0)
+        self.moveCurrentButton.grid(row=4, column=2, pady=5, ipadx=20, ipady=20)
 
         # self.flagImageForReScan = tk.Button(self, text='Flag this photo for rescanning', underline=0)
         # self.flagImageForReScan.grid(row=5, column=0)
 
         self.createFolder = tk.Button(self, text='New Folder', command=self.createNewFolder, underline=0)
-        self.createFolder.grid(row=4, column=2)
-
+        self.createFolder.grid(row=2, column=2, pady=5, ipadx=20, ipady=20)
+        '''
         self.undoLastMove = tk.Button(self, text='Undo Move', command=self.undoMove,
                                       underline=0)
         self.undoLastMove.grid(row=5, column=2)
-
+        '''
         self.selectFolder = tk.Button(self, text="Select Reel", command=self.getFolder,
                                       underline=0)
-        self.selectFolder.grid(row=4, column=5)
+        self.selectFolder.grid(row=5, column=5, pady=5, ipadx=20, ipady=20)
 
         self.close = tk.Button(self, text="Exit", command=self.master.destroy, underline=1)
-        self.close.grid(row=5, column=5)
+        self.close.grid(row=5, column=6, pady=5, ipadx=20, ipady=20)
 
         self.imageCanvas = tk.Canvas(self.master, highlightthickness=0, width=600, height=800)
         self.imageCanvas.grid(row=0, column=0, sticky='nswe', columnspan=2, rowspan=10)
@@ -141,23 +141,23 @@ class SortingGui(tk.Frame):
             self.imageCanvas.imagetk = imagetk  # keep an extra reference to prevent garbage-collectio
 
     def reelSelect(self):
-        global folder
+        global mainFolder
         self.fileBox.delete(0, 'end')
-        self.folder = filedialog.askdirectory(initialdir="/", title="Select a Folder")
+        self.mainFolder = filedialog.askdirectory(initialdir="/", title="Select a Folder")
 
     def getFolder(self):
         # self.fileBox.delete(0, 'end')
         # self.folder = filedialog.askdirectory(initialdir="/", title="Select a Folder")
         # get the list of files
-        global folder
+        global mainFolder
         self.reelSelect()
-        flist = os.listdir(self.folder)
+        flist = os.listdir(self.mainFolder)
 
-        os.chdir(self.folder)
+        os.chdir(self.mainFolder)
         # THE ITEMS INSERTED WITH A LOOP
         fileTypes = (".tif", ".png")
         for item in flist:
-            isFolder = os.path.join(self.folder, item)
+            isFolder = os.path.join(self.mainFolder, item)
             isdir = os.path.isdir(isFolder)
             if item.endswith(fileTypes):
                 self.fileBox.insert(tk.END, item)
@@ -182,8 +182,8 @@ class SortingGui(tk.Frame):
         widget = event.widget
         selection = widget.curselection()
         file = widget.get(selection[0])
-        folder = self.folder
-        file = os.path.join(self.folder, file)
+        folder = self.mainFolder
+        file = os.path.join(folder, file)
         print(file)
         # img = ImageTk.PhotoImage(Image.open(file))
         # self.imageCanvas.image = img
@@ -208,15 +208,19 @@ class SortingGui(tk.Frame):
         self.show_image()
 
     def getCurrentFolder(self, event):
+        global currentFolder
+
         widget = event.widget
         selection = widget.curselection()
         currentFolder = widget.get(selection[0])
-        directory = self.folder
+        directory = self.mainFolder
         currentFolder = os.path.join(directory, currentFolder)
         print(currentFolder)
         # root.after(100, self.getCurrentFolder())
 
     def createNewFolder(self):
+        global mainFolder
+
         folderWindow = tk.Toplevel(app)
 
         folderWindow.title("New Folder")
@@ -228,7 +232,7 @@ class SortingGui(tk.Frame):
             name=folderName.get()
             print(name)
 
-            folder = os.getcwd()
+            folder = self.mainFolder # the current working directory will be the last folder
             print(folder + " folder")
             newFolder = os.path.join(folder, str(name))
             print(newFolder)
@@ -237,7 +241,7 @@ class SortingGui(tk.Frame):
 
                 os.makedirs(newFolder)
 
-                os.chdir(self.folder)
+                os.chdir(newFolder)
                 # THE ITEMS INSERTED WITH A LOOP
                 self.folderBox.insert(tk.END, name)
                 self.folderBox.selection_clear("end")
@@ -278,6 +282,9 @@ class SortingGui(tk.Frame):
             # needs to select the folder in the listbox
 
     def moveToCurrent(self):
+        global currentFolder
+        global mainFolder
+
         viewedFile = self.fileBox.curselection()
         currentOpenFolder = self.folderBox.curselection()
         # or would we invoke the getCurrentFolder function somehow???
@@ -292,15 +299,18 @@ class SortingGui(tk.Frame):
         x = self.folderBox.curselection()
         y = self.fileBox.curselection()
         px = self.folderBox.get(x[0])
-        folder = self.folder
+        folder = currentFolder
         py = self.fileBox.get(y[0])
-        filePath = os.path.join(folder, py)
+        filePath = os.path.join(self.mainFolder, py)
         selectedFolder = px
-        folderPath = os.path.join(folder, px)
-        movedFilePath = os.path.join(folderPath, py)
+        #folderPath = os.path.join(folder, px)
+        movedFilePath = os.path.join(folder, py)
 
-        #print(px)
-        #print(py)
+        print(px)
+        print(py)
+        #print(folderPath)
+        print(filePath)
+        print(movedFilePath)
         os.rename(filePath, movedFilePath)
         #shutil.move(filePath, movedFilePath)
         #os.replace(filePath, movedFilePath)
@@ -315,11 +325,11 @@ class SortingGui(tk.Frame):
         print(file)
         print(movedFolderPath)
         '''
-
+    '''
     def undoMove(self):
         print(self.newspaperTitle.get())
         # os.rename(self.movedFilePath, self.filePath)
-
+    '''
 
     def titleSubmit(self):
         title = self.newspaperTitle.get()
