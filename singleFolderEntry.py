@@ -41,7 +41,7 @@ class SortingGui(tk.Frame):
         self.folderLabel = tk.Label(self, text="Folders", font=("Helvetica", 16))
         self.folderLabel.grid(row=3, column=5, padx=30)
 
-        self.folderBox = tk.Listbox(self, exportselection=False, width=50)
+        self.folderBox = tk.Listbox(self, exportselection=False, width=50, selectmode="single")
         self.folderBox.bind("<<ListboxSelect>>", self.getCurrentFolder)
         self.folderBox.grid(row=4, column=5)
 
