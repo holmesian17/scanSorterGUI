@@ -50,6 +50,9 @@ class SortingGui(tk.Frame):
         # self.bind('Control-m',self.moveToCurrent)
         self.moveCurrentButton.grid(row=4, column=2, pady=5, ipadx=20, ipady=20)
 
+        self.markDupe = tk.Button(self, text='Remove Duplicate', command=self.removeDupe, underline=7)
+        self.markDupe.grid(row=5, column=4, pady=5, ipadx=20, ipady=20)
+
         # self.flagImageForReScan = tk.Button(self, text='Flag this photo for rescanning', underline=0)
         # self.flagImageForReScan.grid(row=5, column=0)
 
@@ -232,7 +235,7 @@ class SortingGui(tk.Frame):
             name=folderName.get()
             print(name)
 
-            folder = self.mainFolder # the current working directory will be the last folder
+            folder = self.mainFolder
             print(folder + " folder")
             newFolder = os.path.join(folder, str(name))
             print(newFolder)
@@ -285,17 +288,6 @@ class SortingGui(tk.Frame):
         global currentFolder
         global mainFolder
 
-        viewedFile = self.fileBox.curselection()
-        currentOpenFolder = self.folderBox.curselection()
-        # or would we invoke the getCurrentFolder function somehow???
-
-        # probably need to use os.path connection
-        # need to save this movement to a variable each time so that we can tell
-        # the system to move specific file from current folder to previous folder
-        # for the undo button
-
-
-        # this is the test code for the current selection mechanism
         x = self.folderBox.curselection()
         y = self.fileBox.curselection()
         px = self.folderBox.get(x[0])
@@ -330,6 +322,50 @@ class SortingGui(tk.Frame):
         print(self.newspaperTitle.get())
         # os.rename(self.movedFilePath, self.filePath)
     '''
+    def removeDupe(self):
+        global mainFolder
+
+        y = self.fileBox.curselection()
+        py = self.fileBox.get(y[0])
+        filePath = os.path.join(self.mainFolder, py)
+        folder = self.mainFolder
+        dupeFolder = os.path.join(self.mainFolder, "Duplicates")
+        movedFilePath = os.path.join(dupeFolder, py)
+
+        if not os.path.exists(dupeFolder):
+            flist = os.listdir(folder)
+
+            os.makedirs(dupeFolder)
+
+            os.chdir(dupeFolder)
+            # THE ITEMS INSERTED WITH A LOOP
+            self.folderBox.insert(tk.END, "Duplicates")
+            self.folderBox.selection_clear("end")
+            self.folderBox.selection_set("end")
+            self.folderBox.see("end")
+
+            os.rename(filePath, movedFilePath)
+
+            self.fileBox.delete(self.fileBox.curselection())
+            self.fileBox.select_set(0)  # This only sets focus on the first item.
+            self.fileBox.event_generate("<<ListboxSelect>>")
+            #os.chdir(newFolder)
+            # needs to then refresh the listbox
+            # and change the selection to the new folder
+            # will this require calling the getCurrentFolder function?
+            print("created")
+
+        else:
+            os.chdir(dupeFolder)
+
+            os.rename(filePath, movedFilePath)
+
+            self.fileBox.delete(self.fileBox.curselection())
+            self.fileBox.select_set(0)  # This only sets focus on the first item.
+            self.fileBox.event_generate("<<ListboxSelect>>")
+            print("changed")
+
+            #print(os.getcwd())
 
     def titleSubmit(self):
         title = self.newspaperTitle.get()
