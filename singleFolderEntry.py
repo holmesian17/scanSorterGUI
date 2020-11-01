@@ -259,11 +259,13 @@ class SortingGui(tk.Frame):
                 # will this require calling the getCurrentFolder function?
                 print("created")
 
+
             else:
                 os.chdir(newFolder)
                 print("changed")
                 print(os.getcwd())
 
+            folderWindow.destroy()
 
         folderLabel = tk.Label(folderWindow, text='Folder name', font=('calibre', 14, 'bold'))
 
