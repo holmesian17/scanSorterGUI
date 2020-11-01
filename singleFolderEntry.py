@@ -1,17 +1,9 @@
 import tkinter as tk
 import os
-import sys
-from tkinter import filedialog, Radiobutton, StringVar
-import random
-
-# import datetime
-# import calendar
-# import tkcalendar
+from tkinter import filedialog
 
 from PIL import Image
 from PIL import ImageTk
-
-
 
 
 class SortingGui(tk.Frame):
@@ -79,16 +71,16 @@ class SortingGui(tk.Frame):
         self.imageCanvas.bind('<MouseWheel>', self.wheel)  # with Windows and MacOS, but not Linux
 
     def move_from(self, event):
-        ''' Remember previous coordinates for scrolling with the mouse '''
+        """ Remember previous coordinates for scrolling with the mouse """
         self.imageCanvas.scan_mark(event.x, event.y)
 
     def move_to(self, event):
-        ''' Drag (move) canvas to the new position '''
+        """ Drag (move) canvas to the new position """
         self.imageCanvas.scan_dragto(event.x, event.y, gain=1)
         self.show_image()  # redraw the image
 
     def wheel(self, event):
-        ''' Zoom with mouse wheel '''
+        """ Zoom with mouse wheel """
         x = self.imageCanvas.canvasx(event.x)
         y = self.imageCanvas.canvasy(event.y)
         bbox = self.imageCanvas.bbox(self.container)  # get image area
@@ -111,8 +103,8 @@ class SortingGui(tk.Frame):
         self.imageCanvas.scale('all', x, y, scale, scale)  # rescale all canvas objects
         self.show_image()
 
-    def show_image(self, event=None):
-        ''' Show image on the Canvas '''
+    def show_image(self):
+        """ Show image on the Canvas """
         bbox1 = self.imageCanvas.bbox(self.container)  # get image area
         # Remove 1 pixel shift at the sides of the bbox1
         bbox1 = (bbox1[0] + 1, bbox1[1] + 1, bbox1[2] - 1, bbox1[3] - 1)
@@ -232,7 +224,7 @@ class SortingGui(tk.Frame):
         folderName = tk.StringVar(self)
 
         def folderSubmit():
-            name=folderName.get()
+            name = folderName.get()
             print(name)
 
             folder = self.mainFolder
@@ -272,19 +264,19 @@ class SortingGui(tk.Frame):
         folderEntry = tk.Entry(folderWindow, textvariable=folderName, font=('calibre', 20, 'normal'))
 
         folderSubmit = tk.Button(folderWindow, text='Submit',
-                                command=folderSubmit, height=1)
+                                 command=folderSubmit, height=1)
         folderEntry.grid(row=1, column=0, sticky='nswe')
         folderLabel.grid(row=0, column=0, sticky='nswe')
         folderSubmit.grid(row=2, column=0, sticky='nswe')
-        #self.newFolder = self.issueDate.get()
-        #newFolder = self.newspaperTitle + ", " + self.issueDate
+
+        # self.newFolder = self.issueDate.get()
+        # newFolder = self.newspaperTitle + ", " + self.issueDate
 
         # print(newFolder + 'test')
 
-        #print(issueDate.get())
+        # print(issueDate.get())
 
-
-            # needs to select the folder in the listbox
+        # needs to select the folder in the listbox
 
     def moveToCurrent(self):
         global currentFolder
@@ -296,18 +288,17 @@ class SortingGui(tk.Frame):
         folder = currentFolder
         py = self.fileBox.get(y[0])
         filePath = os.path.join(self.mainFolder, py)
-        selectedFolder = px
-        #folderPath = os.path.join(folder, px)
+        # folderPath = os.path.join(folder, px)
         movedFilePath = os.path.join(folder, py)
 
         print(px)
         print(py)
-        #print(folderPath)
+        # print(folderPath)
         print(filePath)
         print(movedFilePath)
         os.rename(filePath, movedFilePath)
-        #shutil.move(filePath, movedFilePath)
-        #os.replace(filePath, movedFilePath)
+        # shutil.move(filePath, movedFilePath)
+        # os.replace(filePath, movedFilePath)
         self.fileBox.delete(self.fileBox.curselection())
         self.fileBox.select_set(0)  # This only sets focus on the first item.
         self.fileBox.event_generate("<<ListboxSelect>>")
@@ -319,11 +310,13 @@ class SortingGui(tk.Frame):
         print(file)
         print(movedFolderPath)
         '''
+
     '''
     def undoMove(self):
         print(self.newspaperTitle.get())
         # os.rename(self.movedFilePath, self.filePath)
     '''
+
     def removeDupe(self):
         global mainFolder
 
@@ -351,7 +344,7 @@ class SortingGui(tk.Frame):
             self.fileBox.delete(self.fileBox.curselection())
             self.fileBox.select_set(0)  # This only sets focus on the first item.
             self.fileBox.event_generate("<<ListboxSelect>>")
-            #os.chdir(newFolder)
+            # os.chdir(newFolder)
             # needs to then refresh the listbox
             # and change the selection to the new folder
             # will this require calling the getCurrentFolder function?
@@ -367,7 +360,7 @@ class SortingGui(tk.Frame):
             self.fileBox.event_generate("<<ListboxSelect>>")
             print("changed")
 
-            #print(os.getcwd())
+            # print(os.getcwd())
 
     def titleSubmit(self):
         title = self.newspaperTitle.get()
