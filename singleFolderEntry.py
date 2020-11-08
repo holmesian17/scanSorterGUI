@@ -33,7 +33,7 @@ class SortingGui(tk.Frame):
         self.folderLabel = tk.Label(self, text="Folders", font=("Helvetica", 16))
         self.folderLabel.grid(row=3, column=5, padx=30)
 
-        self.folderBox = tk.Listbox(self, exportselection=False, width=50, selectmode="single")
+        self.folderBox = tk.Listbox(self, exportselection=False, width=50, selectmode="tk.single")
         self.folderBox.bind("<<ListboxSelect>>", self.getCurrentFolder)
         self.folderBox.grid(row=4, column=5)
 
@@ -238,9 +238,11 @@ class SortingGui(tk.Frame):
 
                 os.chdir(newFolder)
                 # THE ITEMS INSERTED WITH A LOOP
-                self.folderBox.insert(tk.END, name)
-                self.folderBox.selection_clear("end")
+                self.folderBox.insert("end", name)
+                self.folderBox.selection_clear(0, "end")
                 self.folderBox.selection_set("end")
+
+                #self.folderBox.activate("end")
                 self.folderBox.see("end")
 
                 print(flist)
