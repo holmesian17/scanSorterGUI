@@ -33,7 +33,7 @@ class SortingGui(tk.Frame):
         self.folderLabel = tk.Label(self, text="Folders", font=("Helvetica", 16))
         self.folderLabel.grid(row=3, column=5, padx=30)
 
-        self.folderBox = tk.Listbox(self, exportselection=False, width=50, selectmode="tk.single")
+        self.folderBox = tk.Listbox(self, exportselection=False, width=50, selectmode="single")
         self.folderBox.bind("<<ListboxSelect>>", self.getCurrentFolder)
         self.folderBox.grid(row=4, column=5)
 
@@ -208,6 +208,7 @@ class SortingGui(tk.Frame):
         widget = event.widget
         selection = widget.curselection()
         currentFolder = widget.get(selection[0])
+        print(currentFolder + " currentFolder in gCF")
         directory = self.mainFolder
         currentFolder = os.path.join(directory, currentFolder)
         print(currentFolder)
@@ -215,6 +216,7 @@ class SortingGui(tk.Frame):
 
     def createNewFolder(self):
         global mainFolder
+        global currentFolder
 
         folderWindow = tk.Toplevel(app)
 
@@ -230,6 +232,7 @@ class SortingGui(tk.Frame):
             folder = self.mainFolder
             print(folder + " folder")
             newFolder = os.path.join(folder, str(name))
+            currentFolder = newFolder
             print(newFolder)
             if not os.path.exists(newFolder):
                 flist = os.listdir(folder)
@@ -242,12 +245,15 @@ class SortingGui(tk.Frame):
                 self.folderBox.selection_clear(0, "end")
                 self.folderBox.selection_set("end")
 
-                #self.folderBox.activate("end")
                 self.folderBox.see("end")
+                self.folderBox.activate("end")
+
+                self.folderBox.event_generate("<<ListboxSelect>>")
+
 
                 print(flist)
 
-                os.chdir(newFolder)
+                #os.chdir(newFolder)
                 # needs to then refresh the listbox
                 # and change the selection to the new folder
                 # will this require calling the getCurrentFolder function?
@@ -336,9 +342,11 @@ class SortingGui(tk.Frame):
 
             os.chdir(dupeFolder)
             # THE ITEMS INSERTED WITH A LOOP
-            self.folderBox.insert(tk.END, "Duplicates")
-            self.folderBox.selection_clear("end")
+            self.folderBox.insert("end", "Duplicates")
+            self.folderBox.selection_clear(0, "end")
             self.folderBox.selection_set("end")
+
+            # self.folderBox.activate("end")
             self.folderBox.see("end")
 
             os.rename(filePath, movedFilePath)
