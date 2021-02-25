@@ -331,12 +331,9 @@ class SortingGui(tk.Frame):
         os.rename(movedFilePath, filePath)
         addBack = os.path.split(filePath)
         self.fileBox.insert(0, addBack[1])
+        self.fileBox.delete(self.fileBox.curselection())
         self.fileBox.select_set(0)
         self.fileBox.event_generate("<<ListboxSelect>>")
-
-
-        print(self.newspaperTitle.get())
-        # os.rename(self.movedFilePath, self.filePath)
 
 
     def removeDupe(self):
