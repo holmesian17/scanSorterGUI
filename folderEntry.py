@@ -325,12 +325,15 @@ class SortingGui(tk.Frame):
 
 
     def undoMove(self):
-        global currentFolder
         global mainFolder
         global filePath
 
         os.rename(movedFilePath, filePath)
-        self.fileBox.insert(tk.END, y)
+        addBack = os.path.split(filePath)
+        self.fileBox.insert(0, addBack[1])
+        self.fileBox.select_set(0)
+        self.fileBox.event_generate("<<ListboxSelect>>")
+
 
         print(self.newspaperTitle.get())
         # os.rename(self.movedFilePath, self.filePath)
