@@ -19,7 +19,8 @@ class sorting_gui(tk.Frame):
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
 
-        self.newspaper_title = tk.StringVar()
+        self.newspaper_title = tk.Button(self, text='Change Title', command=self.title_box, underline=0)
+        self.newspaper_title.grid(row=3, column=2, pady=5, ipadx=20, ipady=20)
         # self.titleEntry = tk.Entry(self, textvariable=newspaper_title, text="Newspaper Title:")
 
         self.issue_date = tk.StringVar()
@@ -383,12 +384,30 @@ class sorting_gui(tk.Frame):
 
             # print(os.getcwd())
 
-    def titleSubmit(self):
-        title = self.newspaper_title.get()
-        # button to enter newspaper title, and needs to print what the current title is
-        # under or next to the button
-        # inserts into the format: newspaper title, date
-        print(title)
+    def title_box(self):
+        global newspaper_title
+
+        title_window = tk.Toplevel(app)
+
+        title_window.title("Change Title")
+        title_window.geometry("400x100")
+
+        title_name = tk.StringVar(self)
+
+        def title_submit():
+            name = title_name.get()
+
+        title_label = tk.Label(title_window, text='Newspaper name', font=('calibre', 14, 'bold'))
+
+        title_entry = tk.Entry(title_window, textvariable=title_name, font=('calibre', 20, 'normal'))
+
+        title_submit = tk.Button(title_window, text='Submit',
+                                  command=title_submit, height=1)
+
+        title_entry.grid(row=1, column=0, sticky='nswe')
+        title_label.grid(row=0, column=0, sticky='nswe')
+        title_submit.grid(row=2, column=0, sticky='nswe')
+
 
     def date_select(self):
         pass
