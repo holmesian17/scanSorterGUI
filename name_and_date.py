@@ -229,6 +229,8 @@ class sorting_gui(tk.Frame):
         def title_submit():
             title = newspaper_title.get()
             print(title)
+            newspaper_title.set("")
+            print(newspaper_title)
             title_window.destroy()
 
         title_label = tk.Label(title_window, text='Newspaper name', font=('calibre', 14, 'bold'))
