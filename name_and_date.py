@@ -22,9 +22,6 @@ class sorting_gui(tk.Frame):
         self.title_button = tk.Button(self, text='Change Title', command=self.title_box, underline=0)
         self.title_button.grid(row=3, column=2, pady=5, ipadx=20, ipady=20)
 
-        self.title_label = tk.Label(self, text=newspaper_title)
-        self.title_label.grid(row=3, column=3)
-
         self.issue_date = tk.StringVar()
 
         self.file_label = tk.Label(self, text="Files", font=("Helvetica", 16))
@@ -234,9 +231,12 @@ class sorting_gui(tk.Frame):
             print("Variable:", title)
             title_window.destroy()
 
+        title_label = tk.Label(self, textvariable=newspaper_title)
+        title_label.grid(row=3, column=3)
+
         title_label = tk.Label(title_window, text='Newspaper name', font=('calibre', 14, 'bold'))
 
-        title_entry = tk.Entry(title_window, text=newspaper_title, font=('calibre', 20, 'normal'))
+        title_entry = tk.Entry(title_window, textvariable=newspaper_title, font=('calibre', 20, 'normal'))
 
         title_submit = tk.Button(title_window, text='Submit',
                                   command=title_submit, height=1)
