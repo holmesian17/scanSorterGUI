@@ -7,7 +7,7 @@ from PIL import Image
 from PIL import ImageTk
 
 
-class sorting_gui(tk.Frame):
+class sorting_gui(tk.Frame):    
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
@@ -15,12 +15,15 @@ class sorting_gui(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-
+        
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
 
-        self.newspaper_title = tk.Button(self, text='Change Title', command=self.title_box, underline=0)
-        self.newspaper_title.grid(row=3, column=2, pady=5, ipadx=20, ipady=20)
+        self.title_button = tk.Button(self, text='Change Title', command=self.title_box, underline=0)
+        self.title_button.grid(row=3, column=2, pady=5, ipadx=20, ipady=20)
+
+        self.title_label = tk.Label(self, text=newspaper_title)
+        self.title_label.grid(row=3, column=3)
 
         self.issue_date = tk.StringVar()
 
@@ -217,25 +220,23 @@ class sorting_gui(tk.Frame):
 
     def title_box(self):
         global newspaper_title
-        global title
+
+        newspaper_title = tk.StringVar()
 
         title_window = tk.Toplevel(app)
 
         title_window.title("Change Title")
         title_window.geometry("400x100")
 
-        newspaper_title = tk.StringVar(self)
-
         def title_submit():
             title = newspaper_title.get()
-            print(title)
             newspaper_title.set("")
-            print(newspaper_title)
+            print("Variable:", title)
             title_window.destroy()
 
         title_label = tk.Label(title_window, text='Newspaper name', font=('calibre', 14, 'bold'))
 
-        title_entry = tk.Entry(title_window, textvariable=newspaper_title, font=('calibre', 20, 'normal'))
+        title_entry = tk.Entry(title_window, text=newspaper_title, font=('calibre', 20, 'normal'))
 
         title_submit = tk.Button(title_window, text='Submit',
                                   command=title_submit, height=1)
@@ -243,8 +244,9 @@ class sorting_gui(tk.Frame):
         title_entry.grid(row=1, column=0, sticky='nswe')
         title_label.grid(row=0, column=0, sticky='nswe')
         title_submit.grid(row=2, column=0, sticky='nswe')
+    
 
-        print("varb", newspaper_title.get())
+        print("varb", newspaper_title)
 
     def create_new_folder(self):
         global main_folder
