@@ -7,7 +7,7 @@ from PIL import Image
 from PIL import ImageTk
 
 
-class sorting_gui(tk.Frame):    
+class sorting_gui(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
@@ -15,7 +15,7 @@ class sorting_gui(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        
+
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
 
@@ -39,7 +39,7 @@ class sorting_gui(tk.Frame):
         self.folder_box.grid(row=4, column=5)
 
         self.move_current_button = tk.Button(self, text='Move to Current Folder',
-                                           command=self.move_to_current, underline=0)
+                                             command=self.move_to_current, underline=0)
         # self.bind('Control-m',self.move_to_current)
         self.move_current_button.grid(row=4, column=2, pady=5, ipadx=20, ipady=20)
 
@@ -53,11 +53,11 @@ class sorting_gui(tk.Frame):
         self.create_folder.grid(row=2, column=2, pady=5, ipadx=20, ipady=20)
 
         self.undo_last_move = tk.Button(self, text='Undo Move', command=self.undo_move,
-                                      underline=0)
+                                        underline=0)
         self.undo_last_move.grid(row=5, column=2, pady=5, ipadx=20, ipady=20)
 
         self.select_folder = tk.Button(self, text="Select Reel", command=self.get_folder,
-                                      underline=0)
+                                       underline=0)
         self.select_folder.grid(row=5, column=5, pady=5, ipadx=20, ipady=20)
 
         self.close = tk.Button(self, text="Exit", command=self.master.destroy, underline=1)
@@ -132,7 +132,7 @@ class sorting_gui(tk.Frame):
             image = self.image.crop((int(x1 / self.imscale), int(y1 / self.imscale), x, y))
             imagetk = ImageTk.PhotoImage(image.resize((int(x2 - x1), int(y2 - y1))))
             imageid = self.image_canvas.create_image(max(bbox2[0], bbox1[0]), max(bbox2[1], bbox1[1]),
-                                                    anchor='nw', image=imagetk)
+                                                     anchor='nw', image=imagetk)
             self.image_canvas.lower(imageid)  # set image into background
             self.image_canvas.imagetk = imagetk  # keep an extra reference to prevent garbage-collectio
 
@@ -163,7 +163,7 @@ class sorting_gui(tk.Frame):
                 continue
         self.file_box.select_set(0)  # This only sets focus on the first item.
         self.file_box.event_generate("<<ListboxSelect>>")
-        #print(flist)
+        # print(flist)
 
     def populate_list_box(self):
         flist = os.listdir(self.folder)
@@ -172,7 +172,7 @@ class sorting_gui(tk.Frame):
         # THE ITEMS INSERTED WITH A LOOP
         is_folder = os.path.join(self.folder, self.new_folder)
         self.folder_box.insert(tk.END, item)
-        #print(flist)
+        # print(flist)
 
     def show_content(self, event):
         widget = event.widget
@@ -180,7 +180,7 @@ class sorting_gui(tk.Frame):
         file = widget.get(selection[0])
         folder = self.main_folder
         file = os.path.join(folder, file)
-        #print(file)
+        # print(file)
         # img = ImageTk.PhotoImage(Image.open(file))
         # self.image_canvas.image = img
         # self.image_canvas.create_image(20, 20, image=img)
@@ -209,16 +209,14 @@ class sorting_gui(tk.Frame):
         widget = event.widget
         selection = widget.curselection()
         current_folder = widget.get(selection[0])
-        #print(current_folder + " current_folder in gCF")
+        # print(current_folder + " current_folder in gCF")
         directory = self.main_folder
         current_folder = os.path.join(directory, current_folder)
-        #print(current_folder)
+        # print(current_folder)
         # root.after(100, self.get_current_folder())
 
     def title_box(self):
-        global newspaper_title
-
-        newspaper_title = tk.StringVar()
+        self.newspaper_title = tk.StringVar()
 
         title_window = tk.Toplevel(app)
 
@@ -226,27 +224,27 @@ class sorting_gui(tk.Frame):
         title_window.geometry("400x100")
 
         def title_submit():
-            title = newspaper_title.get()
-            newspaper_title.set("")
+            title = self.newspaper_title.get()
+            self.newspaper_title.set("")
             print("Variable:", title)
             title_window.destroy()
 
-        title_label = tk.Label(self, textvariable=newspaper_title)
-        title_label.grid(row=3, column=3)
-
         title_label = tk.Label(title_window, text='Newspaper name', font=('calibre', 14, 'bold'))
 
-        title_entry = tk.Entry(title_window, textvariable=newspaper_title, font=('calibre', 20, 'normal'))
+        title_entry = tk.Entry(title_window, textvariable=self.newspaper_title, font=('calibre', 20, 'normal'))
 
         title_submit = tk.Button(title_window, text='Submit',
-                                  command=title_submit, height=1)
+                                 command=title_submit, height=1)
 
         title_entry.grid(row=1, column=0, sticky='nswe')
         title_label.grid(row=0, column=0, sticky='nswe')
         title_submit.grid(row=2, column=0, sticky='nswe')
-    
 
-        print("varb", newspaper_title)
+        print("varb", self.newspaper_title)
+
+    def title_label_create(self):
+        title_label = tk.Label(self, textvariable=self.newspaper_title)
+        title_label.grid(row=3, column=3)
 
     def create_new_folder(self):
         global main_folder
@@ -261,13 +259,13 @@ class sorting_gui(tk.Frame):
 
         def folder_submit():
             name = folder_name.get()
-            #print(name)
+            # print(name)
 
             folder = self.main_folder
-            #(folder + " folder")
+            # (folder + " folder")
             new_folder = os.path.join(folder, str(name))
             current_folder = new_folder
-            #print(new_folder)
+            # print(new_folder)
             if not os.path.exists(new_folder):
                 flist = os.listdir(folder)
 
@@ -284,20 +282,19 @@ class sorting_gui(tk.Frame):
 
                 self.folder_box.event_generate("<<ListboxSelect>>")
 
+                # print(flist)
 
-                #print(flist)
-
-                #os.chdir(new_folder)
+                # os.chdir(new_folder)
                 # needs to then refresh the listbox
                 # and change the selection to the new folder
                 # will this require calling the get_current_folder function?
-                #print("created")
+                # print("created")
 
 
             else:
                 os.chdir(new_folder)
-                #print("changed")
-                #print(os.getcwd())
+                # print("changed")
+                # print(os.getcwd())
 
             folder_window.destroy()
 
@@ -306,7 +303,7 @@ class sorting_gui(tk.Frame):
         folder_entry = tk.Entry(folder_window, textvariable=folder_name, font=('calibre', 20, 'normal'))
 
         folder_submit = tk.Button(folder_window, text='Submit',
-                                 command=folder_submit, height=1)
+                                  command=folder_submit, height=1)
         folder_entry.grid(row=1, column=0, sticky='nswe')
         folder_label.grid(row=0, column=0, sticky='nswe')
         folder_submit.grid(row=2, column=0, sticky='nswe')
@@ -336,11 +333,11 @@ class sorting_gui(tk.Frame):
         # folderPath = os.path.join(folder, px)
         moved_file_path = os.path.join(folder, py)
 
-        #print(px)
-        #print(py)
+        # print(px)
+        # print(py)
         # print(folderPath)
-        #print(file_path)
-        #print(moved_file_path)
+        # print(file_path)
+        # print(moved_file_path)
         os.rename(file_path, moved_file_path)
         # shutil.move(file_path, moved_file_path)
         # os.replace(file_path, moved_file_path)
@@ -356,7 +353,6 @@ class sorting_gui(tk.Frame):
         print(movedFolderPath)
         '''
 
-
     def undo_move(self):
         global main_folder
         global file_path
@@ -367,7 +363,6 @@ class sorting_gui(tk.Frame):
         self.file_box.delete(self.file_box.curselection())
         self.file_box.select_set(0)
         self.file_box.event_generate("<<ListboxSelect>>")
-
 
     def remove_dupe(self):
         global main_folder
@@ -402,7 +397,7 @@ class sorting_gui(tk.Frame):
             # needs to then refresh the listbox
             # and change the selection to the new folder
             # will this require calling the get_current_folder function?
-            #print("created")
+            # print("created")
 
         else:
             os.chdir(dupe_folder)
@@ -412,7 +407,7 @@ class sorting_gui(tk.Frame):
             self.file_box.delete(self.file_box.curselection())
             self.file_box.select_set(0)  # This only sets focus on the first item.
             self.file_box.event_generate("<<ListboxSelect>>")
-            #print("changed")
+            # print("changed")
 
             # print(os.getcwd())
 
