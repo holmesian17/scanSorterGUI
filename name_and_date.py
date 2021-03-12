@@ -12,6 +12,7 @@ class sorting_gui(tk.Frame):
         super().__init__(master)
         self.master = master
         self.grid(column=9)
+        self.newspaper_title = tk.StringVar()
         self.create_widgets()
 
     def create_widgets(self):
@@ -256,13 +257,14 @@ class sorting_gui(tk.Frame):
         folder_window.geometry("400x100")
 
         folder_name = tk.StringVar(self)
-
         def folder_submit():
             name = folder_name.get()
             # print(name)
 
             folder = self.main_folder
             # (folder + " folder")
+            print("title test:", self.newspaper_title)
+
             new_folder = os.path.join(folder, str(name))
             current_folder = new_folder
             # print(new_folder)
