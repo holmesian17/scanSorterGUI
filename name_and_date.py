@@ -14,7 +14,16 @@ class sorting_gui(tk.Frame):
         self.grid(column=9)
         self.create_widgets()
 
+
     def create_widgets(self):
+        global newspaper_title
+        
+        newspaper_title = tk.StringVar(self)
+
+        self.rowconfigure(0,weight=1, uniform='row')
+        self.rowconfigure(1,weight=1, uniform='row')
+        self.rowconfigure(2,weight=1, uniform='row')
+        self.rowconfigure(3,weight=1, uniform='row')
         
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
@@ -54,12 +63,12 @@ class sorting_gui(tk.Frame):
         self.create_title = tk.Button(self, text='Newspaper Title', command=self.get_title, underline=10)
         self.create_title.grid(row=1, column=2, pady=5, ipadx=20, ipady=20)
         
-        ### self.title_label=tk.Label(self, text=newspaper_title, font=("Helvetica", 16))
-        ### self.title_label.grid(row=1, column=2, pady=5, ipadx=20, ipady=20)
+        self.title_label=tk.Label(self, textvariable=newspaper_title, wraplength=120)
+        self.title_label.grid(row=2, column=2, pady=5, ipadx=20, ipady=20)
         
         #New folder creation button
         self.create_folder = tk.Button(self, text='New Folder', command=self.create_new_folder, underline=0)
-        self.create_folder.grid(row=2, column=2, pady=5, ipadx=20, ipady=20)
+        self.create_folder.grid(row=3, column=2, pady=5, ipadx=20, ipady=20)
 
         #Undo last file move button
         self.undo_last_move = tk.Button(self, text='Undo Move', command=self.undo_move,
@@ -237,8 +246,6 @@ class sorting_gui(tk.Frame):
         title_window.title("Newspaper Title")
         title_window.geometry("600x200")
 
-        newspaper_title = tk.StringVar(self)
-
         def title_submit():
             title = newspaper_title.get()
 
@@ -310,7 +317,7 @@ class sorting_gui(tk.Frame):
 
             folder_window.destroy()
 
-        folder_label = tk.Label(folder_window, text='Folder name', font=('calibre', 14, 'bold'))
+        folder_label = tk.Label(folder_window, text='Newspaper date', font=('calibre', 14, 'bold'))
 
         folder_entry = tk.Entry(folder_window, textvariable=folder_name, font=('calibre', 20, 'normal'))
 
