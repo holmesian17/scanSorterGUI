@@ -19,11 +19,6 @@ class sorting_gui(tk.Frame):
         global newspaper_title
         
         newspaper_title = tk.StringVar(self)
-
-        self.rowconfigure(0,weight=1, uniform='row')
-        self.rowconfigure(1,weight=1, uniform='row')
-        self.rowconfigure(2,weight=1, uniform='row')
-        self.rowconfigure(3,weight=1, uniform='row')
         
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
