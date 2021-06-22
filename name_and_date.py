@@ -21,7 +21,8 @@ class sorting_gui(tk.Frame):
         newspaper_title = tk.StringVar(self)
         newspaper_date = tk.StringVar(self)
 
-        #Calendar button
+        #Calendar embedded
+        '''
         self.date_cal = Calendar(self, width=5, selectmode = 'day', year = 1900, month = 1, day = 1, date_pattern='mm dd, yyyy')
         self.date_cal.grid(row=1, column=3, pady=5, ipadx=20, ipady=20)
 
@@ -33,12 +34,14 @@ class sorting_gui(tk.Frame):
 
         self.date_label = tk.Label(self, text="")
         self.date_label.grid(row=2, column=3,pady=5, ipadx=20, ipady=20) 
-        
+        '''
         ### self.date_picker = tk.Button(self, text='Set Date', command=self.get_newspaper_date, underline=5)
         ### self.date_picker.grid(row=3, column=3, pady=5, ipadx=20, ipady=20)
 
         ### self.date_label=tk.Label(self, textvariable=newspaper_date.get, wraplength=120)
         ### self.date_label.grid(row=2, column=3, pady=5, ipadx=20, ipady=20)
+
+        
         
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
