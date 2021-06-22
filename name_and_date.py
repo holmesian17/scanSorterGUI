@@ -17,8 +17,16 @@ class sorting_gui(tk.Frame):
 
     def create_widgets(self):
         global newspaper_title
-        
+        global newspaper_date
         newspaper_title = tk.StringVar(self)
+        newspaper_date = tk.StringVar(self)
+
+        #Calendar button
+        self.date_picker = tk.Button(self, text='Set Date', command=self.get_newspaper_date, underline=5)
+        self.date_picker.grid(row=3, column=3, pady=5, ipadx=20, ipady=20)
+
+        self.date_label=tk.Label(self, textvariable=newspaper_date, wraplength=120)
+        self.date_label.grid(row=2, column=3, pady=5, ipadx=20, ipady=20)
         
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
@@ -28,7 +36,7 @@ class sorting_gui(tk.Frame):
         self.file_label.grid(row=0, column=5)
 
         #File box creation
-        self.file_box = tk.Listbox(self, exportselection=False, width=50)
+        self.file_box = tk.Listbox(self, exportselection=False, width=40)
         self.file_box.bind("<<ListboxSelect>>", self.show_content)
         self.file_box.grid(row=1, column=5, padx=30, rowspan=2)
 
@@ -37,7 +45,7 @@ class sorting_gui(tk.Frame):
         self.folder_label.grid(row=3, column=5, padx=30)
 
         #Folder box creation
-        self.folder_box = tk.Listbox(self, exportselection=False, width=50, selectmode="single")
+        self.folder_box = tk.Listbox(self, exportselection=False, width=40, selectmode="single")
         self.folder_box.bind("<<ListboxSelect>>", self.get_current_folder)
         self.folder_box.grid(row=4, column=5)
 
@@ -50,14 +58,15 @@ class sorting_gui(tk.Frame):
         self.mark_dupe = tk.Button(self, text='Remove Duplicate', command=self.remove_dupe, underline=7)
         self.mark_dupe.grid(row=5, column=4, pady=5, ipadx=20, ipady=20)
 
-        # Flag image future feature
+        # Flag image future feature - Adds it to a text file using the folder name
         ### self.flagImageForReScan = tk.Button(self, text='Flag this photo for rescanning', underline=0)
         ### self.flagImageForReScan.grid(row=5, column=0)
 
         #New title creation button
         self.create_title = tk.Button(self, text='Newspaper Title', command=self.get_title, underline=10)
         self.create_title.grid(row=1, column=2, pady=5, ipadx=20, ipady=20)
-        
+
+        #Title text label
         self.title_label=tk.Label(self, textvariable=newspaper_title, wraplength=120)
         self.title_label.grid(row=2, column=2, pady=5, ipadx=20, ipady=20)
         
@@ -255,6 +264,32 @@ class sorting_gui(tk.Frame):
         title_entry.grid(row=1, column=0, sticky='nswe')
         title_label.grid(row=0, column=0, sticky='nswe')
         title_submit.grid(row=2, column=0, sticky='nswe')
+        
+    def get_newspaper_date(self):
+        global newspaper_date
+
+        date_window = tk.Toplevel(app)
+
+        date_window.title("Date Selection")
+        date_window.geometry("400x400")
+        
+        def date_submit():
+            newspaper_date = date_cal.get_date()
+
+            print(newspaper_date)
+            
+            date_window.destroy()    
+            
+        date_label = tk.Label(date_window, text='Select Date', font=('calibre', 14, 'bold')) 
+        date_cal = Calendar(date_window, selectmode = 'day', year = 1900, month = 1, day = 1)
+        date_submit = tk.Button(date_window, text = 'Submit', command=date_submit, height=1)
+
+        date_cal.grid(row=1, column=0, sticky='nswe')
+        date_label.grid(row=0, column=0, sticky='nswe')
+        date_submit.grid(row=2, column=0, sticky='nswe')
+        
+        
+        
         
     def create_new_folder(self):
         global main_folder
