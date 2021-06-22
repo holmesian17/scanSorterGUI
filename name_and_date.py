@@ -22,32 +22,44 @@ class sorting_gui(tk.Frame):
         newspaper_date = tk.StringVar(self)
 
         #Calendar button
-        self.date_picker = tk.Button(self, text='Set Date', command=self.get_newspaper_date, underline=5)
-        self.date_picker.grid(row=3, column=3, pady=5, ipadx=20, ipady=20)
+        self.date_cal = Calendar(self, width=5, selectmode = 'day', year = 1900, month = 1, day = 1, date_pattern='mm dd, yyyy')
+        self.date_cal.grid(row=1, column=3, pady=5, ipadx=20, ipady=20)
 
-        self.date_label=tk.Label(self, textvariable=newspaper_date, wraplength=120)
-        self.date_label.grid(row=2, column=3, pady=5, ipadx=20, ipady=20)
+        def get_date():
+            self.date_label.config(text=self.date_cal.get_date())
+
+        self.date_button = tk.Button(self, text="Set Date", command=get_date)
+        self.date_button.grid(row=3, column=3, pady=5, ipadx=20, ipady=20)
+
+        self.date_label = tk.Label(self, text="")
+        self.date_label.grid(row=2, column=3,pady=5, ipadx=20, ipady=20) 
+        
+        ### self.date_picker = tk.Button(self, text='Set Date', command=self.get_newspaper_date, underline=5)
+        ### self.date_picker.grid(row=3, column=3, pady=5, ipadx=20, ipady=20)
+
+        ### self.date_label=tk.Label(self, textvariable=newspaper_date.get, wraplength=120)
+        ### self.date_label.grid(row=2, column=3, pady=5, ipadx=20, ipady=20)
         
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
 
         #Files heading
         self.file_label = tk.Label(self, text="Files", font=("Helvetica", 16))
-        self.file_label.grid(row=0, column=5)
+        self.file_label.grid(row=0, column=4)
 
         #File box creation
         self.file_box = tk.Listbox(self, exportselection=False, width=40)
         self.file_box.bind("<<ListboxSelect>>", self.show_content)
-        self.file_box.grid(row=1, column=5, padx=30, rowspan=2)
+        self.file_box.grid(row=1, column=4, padx=30, rowspan=2)
 
         #Folders heading
         self.folder_label = tk.Label(self, text="Folders", font=("Helvetica", 16))
-        self.folder_label.grid(row=3, column=5, padx=30)
+        self.folder_label.grid(row=3, column=4, padx=30)
 
         #Folder box creation
         self.folder_box = tk.Listbox(self, exportselection=False, width=40, selectmode="single")
         self.folder_box.bind("<<ListboxSelect>>", self.get_current_folder)
-        self.folder_box.grid(row=4, column=5)
+        self.folder_box.grid(row=4, column=4)
 
         #Move to current folder button
         self.move_current_button = tk.Button(self, text='Move to Current Folder',
@@ -56,7 +68,7 @@ class sorting_gui(tk.Frame):
 
         #Duplicate button
         self.mark_dupe = tk.Button(self, text='Remove Duplicate', command=self.remove_dupe, underline=7)
-        self.mark_dupe.grid(row=5, column=4, pady=5, ipadx=20, ipady=20)
+        self.mark_dupe.grid(row=5, column=3, pady=5, ipadx=20, ipady=20)
 
         # Flag image future feature - Adds it to a text file using the folder name
         ### self.flagImageForReScan = tk.Button(self, text='Flag this photo for rescanning', underline=0)
@@ -265,6 +277,7 @@ class sorting_gui(tk.Frame):
         title_label.grid(row=0, column=0, sticky='nswe')
         title_submit.grid(row=2, column=0, sticky='nswe')
         
+    '''       
     def get_newspaper_date(self):
         global newspaper_date
 
@@ -274,6 +287,7 @@ class sorting_gui(tk.Frame):
         date_window.geometry("400x400")
         
         def date_submit():
+            
             newspaper_date = date_cal.get_date()
 
             print(newspaper_date)
@@ -287,7 +301,7 @@ class sorting_gui(tk.Frame):
         date_cal.grid(row=1, column=0, sticky='nswe')
         date_label.grid(row=0, column=0, sticky='nswe')
         date_submit.grid(row=2, column=0, sticky='nswe')
-        
+    '''
         
         
         
