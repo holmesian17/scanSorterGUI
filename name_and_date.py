@@ -1,6 +1,7 @@
 import tkinter as tk
 import os
 from tkinter import filedialog
+from tkinter import *
 from tkcalendar import Calendar
 
 from PIL import Image
@@ -18,30 +19,54 @@ class sorting_gui(tk.Frame):
     def create_widgets(self):
         global newspaper_title
         global newspaper_date
+        global month
+        global day
+        global year
+        global check_day
+
         newspaper_title = tk.StringVar(self)
         newspaper_date = tk.StringVar(self)
-
-        #Calendar embedded
-        '''
-        self.date_cal = Calendar(self, width=5, selectmode = 'day', year = 1900, month = 1, day = 1, date_pattern='mm dd, yyyy')
-        self.date_cal.grid(row=1, column=3, pady=5, ipadx=20, ipady=20)
-
-        def get_date():
-            self.date_label.config(text=self.date_cal.get_date())
-
-        self.date_button = tk.Button(self, text="Set Date", command=get_date)
-        self.date_button.grid(row=3, column=3, pady=5, ipadx=20, ipady=20)
-
-        self.date_label = tk.Label(self, text="")
-        self.date_label.grid(row=2, column=3,pady=5, ipadx=20, ipady=20) 
-        '''
-        ### self.date_picker = tk.Button(self, text='Set Date', command=self.get_newspaper_date, underline=5)
-        ### self.date_picker.grid(row=3, column=3, pady=5, ipadx=20, ipady=20)
-
-        ### self.date_label=tk.Label(self, textvariable=newspaper_date.get, wraplength=120)
-        ### self.date_label.grid(row=2, column=3, pady=5, ipadx=20, ipady=20)
-
+        month = tk.StringVar(self)
+        day = tk.IntVar(self)
+        year = tk.IntVar(self)
+        check_day = tk.IntVar(self)
+        check_day.set(1)
         
+        MONTHS = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October", 
+            "November", 
+            "December"
+            ]
+        
+        #Month picker dropdown
+        month.set(MONTHS[0])
+        self.month_dropdown = OptionMenu(self, month, *MONTHS)
+        self.month_dropdown.grid(row=8, column=1, pady=5, ipadx=20, ipady=20)
+
+        #day/week radiobuttons
+        tk.Radiobutton(self, text="Day", variable=check_day, value=1).grid(row=8, column=2)
+        tk.Radiobutton(self, text="Week", variable=check_day, value=2).grid(row=9, column=2)
+
+        #Day spinbox
+        self.day_spinbox = Spinbox(self, from_= 1, to = 31)
+        self.day_spinbox.grid(row=8, column=3, pady=5, ipadx=20, ipady=20) 
+
+        #Week spinbox
+        self.week_spinbox = Spinbox(self, from_= 1, to = 31, increment=7)
+        self.week_spinbox.grid(row=9, column=3, pady=5, ipadx=20, ipady=20)
+
+        #Year spinbox
+        self.year_spinbox = Spinbox(self, from_= 1874, to = 2021)
+        self.year_spinbox.grid(row=8, column=4, pady=5, ipadx=20, ipady=20)
         
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
@@ -97,15 +122,15 @@ class sorting_gui(tk.Frame):
         #Reel select button
         self.select_folder = tk.Button(self, text="Select Reel", command=self.get_folder,
                                       underline=0)
-        self.select_folder.grid(row=5, column=5, pady=5, ipadx=20, ipady=20)
+        self.select_folder.grid(row=5, column=4, pady=5, ipadx=20, ipady=20)
 
         #Exit button
         self.close = tk.Button(self, text="Exit", command=self.master.destroy, underline=1)
-        self.close.grid(row=5, column=6, pady=5, ipadx=20, ipady=20)
+        self.close.grid(row=5, column=5, pady=5, ipadx=20, ipady=20)
 
         #Image canvas - image warps on drag
-        self.image_canvas = tk.Canvas(self.master, highlightthickness=0, width=600, height=800)
-        self.image_canvas.grid(row=0, column=0, sticky='nswe', columnspan=2, rowspan=10)
+        self.image_canvas = tk.Canvas(self.master, highlightthickness=0, width=600, height=600)
+        self.image_canvas.grid(row=0, column=0, sticky='nswe', columnspan=2, rowspan=6)
         self.image_canvas.update()  # wait till canvas is created
 
         #Scroll zoom and click/drag functions
@@ -279,100 +304,97 @@ class sorting_gui(tk.Frame):
         title_entry.grid(row=1, column=0, sticky='nswe')
         title_label.grid(row=0, column=0, sticky='nswe')
         title_submit.grid(row=2, column=0, sticky='nswe')
-        
-    '''       
-    def get_newspaper_date(self):
+
+    def get_date(self):
+        global month
+        global day
+        global year
+        global check_day
         global newspaper_date
 
-        date_window = tk.Toplevel(app)
+        if check_day == 1:
+            day = day_spinbox.get()
+        elif check_day == 2:
+            day = week_spinbox.get()
 
-        date_window.title("Date Selection")
-        date_window.geometry("400x400")
+        day = str(day)
+        year = str(year)
         
-        def date_submit():
-            
-            newspaper_date = date_cal.get_date()
-
-            print(newspaper_date)
-            
-            date_window.destroy()    
-            
-        date_label = tk.Label(date_window, text='Select Date', font=('calibre', 14, 'bold')) 
-        date_cal = Calendar(date_window, selectmode = 'day', year = 1900, month = 1, day = 1)
-        date_submit = tk.Button(date_window, text = 'Submit', command=date_submit, height=1)
-
-        date_cal.grid(row=1, column=0, sticky='nswe')
-        date_label.grid(row=0, column=0, sticky='nswe')
-        date_submit.grid(row=2, column=0, sticky='nswe')
-    '''
-        
-        
+        newspaper_date = month + " " + day + ", " + year
+        print(newspaper_date)
         
     def create_new_folder(self):
         global main_folder
         global current_folder
         global newspaper_title
+        global newspaper_date
 
-        folder_window = tk.Toplevel(app)
+        global month
+        global day
+        global year
+        global check_day
 
-        folder_window.title("New Folder")
-        folder_window.geometry("600x200")
+        month=month.get()
+        day=day.get()
+        year=year.get()
+        
+        if check_day == 1:
+            day = day_spinbox.get()
+        elif check_day == 2:
+            day = week_spinbox.get()
+            
+        newspaper_date='{m} {d}, {y}'.format(m=month, d=day, y=year)
+        
+        title = newspaper_title.get()
 
-        folder_name = tk.StringVar(self)
+        date = newspaper_date
 
-        def folder_submit():
-            name = folder_name.get()
-            title = newspaper_title.get()
-            #print(name)
+        folder = self.main_folder
+        #(folder + " folder")
+        path = str(title) + ', ' + str(date)
+        new_folder = os.path.join(folder, path)
+        current_folder = new_folder
+        #print(new_folder)
+        if not os.path.exists(new_folder):
+            flist = os.listdir(folder)
 
-            folder = self.main_folder
-            #(folder + " folder")
-            path = str(title) + ', ' + str(name)
-            new_folder = os.path.join(folder, path)
-            current_folder = new_folder
-            #print(new_folder)
-            if not os.path.exists(new_folder):
-                flist = os.listdir(folder)
+            os.makedirs(new_folder)
 
-                os.makedirs(new_folder)
+            os.chdir(new_folder)
+            # THE ITEMS INSERTED WITH A LOOP
+            self.folder_box.insert("end", path)
+            self.folder_box.selection_clear(0, "end")
+            self.folder_box.selection_set("end")
 
-                os.chdir(new_folder)
-                # THE ITEMS INSERTED WITH A LOOP
-                self.folder_box.insert("end", path)
-                self.folder_box.selection_clear(0, "end")
-                self.folder_box.selection_set("end")
+            self.folder_box.see("end")
+            self.folder_box.activate("end")
 
-                self.folder_box.see("end")
-                self.folder_box.activate("end")
-
-                self.folder_box.event_generate("<<ListboxSelect>>")
-
-
-                #print(flist)
-
-                #os.chdir(new_folder)
-                # needs to then refresh the listbox
-                # and change the selection to the new folder
-                # will this require calling the get_current_folder function?
-                #print("created")
+            self.folder_box.event_generate("<<ListboxSelect>>")
 
 
-            else:
-                os.chdir(new_folder)
-                #print("changed")
-                #print(os.getcwd())
+            #print(flist)
 
-            folder_window.destroy()
+            #os.chdir(new_folder)
+            # needs to then refresh the listbox
+            # and change the selection to the new folder
+            # will this require calling the get_current_folder function?
+            #print("created")
 
-        folder_label = tk.Label(folder_window, text='Newspaper date', font=('calibre', 14, 'bold'))
 
-        folder_entry = tk.Entry(folder_window, textvariable=folder_name, font=('calibre', 20, 'normal'))
+        else:
+            os.chdir(new_folder)
+            #print("changed")
+            #print(os.getcwd())
 
-        folder_submit = tk.Button(folder_window, text='Submit',
-                                 command=folder_submit, height=1)
-        folder_entry.grid(row=1, column=0, sticky='nswe')
-        folder_label.grid(row=0, column=0, sticky='nswe')
-        folder_submit.grid(row=2, column=0, sticky='nswe')
+
+        # folder_label = tk.Label(folder_window, text='Newspaper date', font=('calibre', 14, 'bold'))
+
+        # folder_entry = tk.Entry(folder_window, textvariable=folder_name, font=('calibre', 20, 'normal'))
+
+        # folder_submit = tk.Button(folder_window, text='Submit', command=folder_submit, height=1)
+        # folder_entry.grid(row=1, column=0, sticky='nswe')
+        # folder_label.grid(row=0, column=0, sticky='nswe')
+        # folder_submit.grid(row=2, column=0, sticky='nswe')
 
         # self.new_folder = self.issue_date.get()
         # new_folder = self.newspaper_title + ", " + self.issue_date
