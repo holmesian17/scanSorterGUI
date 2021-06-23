@@ -57,15 +57,15 @@ class sorting_gui(tk.Frame):
         tk.Radiobutton(self, text="Week", variable=check_day, value=2).grid(row=9, column=2)
 
         #Day spinbox
-        self.day_spinbox = Spinbox(self, from_= 1, to = 31)
+        self.day_spinbox = Spinbox(self, from_= 1, to = 31, textvariable=day)
         self.day_spinbox.grid(row=8, column=3, pady=5, ipadx=20, ipady=20) 
 
         #Week spinbox
-        self.week_spinbox = Spinbox(self, from_= 1, to = 31, increment=7)
+        self.week_spinbox = Spinbox(self, from_= 1, to = 31, increment=7, textvariable=day)
         self.week_spinbox.grid(row=9, column=3, pady=5, ipadx=20, ipady=20)
 
         #Year spinbox
-        self.year_spinbox = Spinbox(self, from_= 1874, to = 2021)
+        self.year_spinbox = Spinbox(self, from_= 1874, to = 2021, textvariable=year)
         self.year_spinbox.grid(row=8, column=4, pady=5, ipadx=20, ipady=20)
         
         # popup dialog for newspaper information
@@ -305,24 +305,6 @@ class sorting_gui(tk.Frame):
         title_label.grid(row=0, column=0, sticky='nswe')
         title_submit.grid(row=2, column=0, sticky='nswe')
 
-    def get_date(self):
-        global month
-        global day
-        global year
-        global check_day
-        global newspaper_date
-
-        if check_day == 1:
-            day = day_spinbox.get()
-        elif check_day == 2:
-            day = week_spinbox.get()
-
-        day = str(day)
-        year = str(year)
-        
-        newspaper_date = month + " " + day + ", " + year
-        print(newspaper_date)
-        
     def create_new_folder(self):
         global main_folder
         global current_folder
