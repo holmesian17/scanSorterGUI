@@ -27,8 +27,8 @@ class sorting_gui(tk.Frame):
         newspaper_title = tk.StringVar(self)
         newspaper_date = tk.StringVar(self)
         month = tk.StringVar(self)
-        day = tk.IntVar(self)
-        year = tk.IntVar(self)
+        day = tk.StringVar(self)
+        year = tk.StringVar(self)
         check_day = tk.IntVar(self)
         check_day.set(1)
         
@@ -49,24 +49,24 @@ class sorting_gui(tk.Frame):
         
         #Month picker dropdown
         month.set(MONTHS[0])
-        self.month_dropdown = OptionMenu(self, month, *MONTHS, command=self.callback)
+        self.month_dropdown = OptionMenu(self, month, *MONTHS, )#command=self.callback
         self.month_dropdown.grid(row=8, column=1, pady=5, ipadx=20, ipady=20)
         
         #day/week radiobuttons
-        tk.Radiobutton(self, text="Day", variable=check_day, value=1).grid(row=8, column=2)
-        tk.Radiobutton(self, text="Week", variable=check_day, value=2).grid(row=9, column=2)
+        # tk.Radiobutton(self, text="Day", variable=check_day, value=1).grid(row=8, column=2)
+        # tk.Radiobutton(self, text="Week", variable=check_day, value=2).grid(row=9, column=2)
 
         #Day spinbox
-        self.day_spinbox = Spinbox(self, from_= 1, to = 31, textvariable=day, command=self.callback_day)
-        self.day_spinbox.grid(row=8, column=3, pady=5, ipadx=20, ipady=20) 
+        self.day_spinbox = Spinbox(self, from_= 1, to = 31, textvariable=day, )#command=self.callback_day
+        self.day_spinbox.grid(row=8, column=2, pady=5, ipadx=20, ipady=20) 
 
         #Week spinbox
-        self.week_spinbox = Spinbox(self, from_= 1, to = 31, increment=7, textvariable=day, command=self.callback_day)
-        self.week_spinbox.grid(row=9, column=3, pady=5, ipadx=20, ipady=20)
+        self.week_spinbox = Spinbox(self, from_= 1, to = 31, increment=7, textvariable=day, )#command=self.callback_day
+        self.week_spinbox.grid(row=9, column=2, pady=5, ipadx=20, ipady=20)
 
         #Year spinbox
-        self.year_spinbox = Spinbox(self, from_= 1874, to = 2021, textvariable=year, command=self.callback_year)
-        self.year_spinbox.grid(row=8, column=4, pady=5, ipadx=20, ipady=20)
+        self.year_spinbox = Spinbox(self, from_= 1874, to = 2021, textvariable=year, )#command=self.callback_year
+        self.year_spinbox.grid(row=8, column=3, pady=5, ipadx=20, ipady=20)
         
         # popup dialog for newspaper information
         self.info_field = tk.Label(self, text="Enter Newspaper Information")
@@ -304,16 +304,20 @@ class sorting_gui(tk.Frame):
         title_entry.grid(row=1, column=0, sticky='nswe')
         title_label.grid(row=0, column=0, sticky='nswe')
         title_submit.grid(row=2, column=0, sticky='nswe')
-        
-    def callback(month, *args):
-        print(month)
+    '''    
+    def callback(self, *args):
+        global month
+        month = month.get()
+    
+    def callback_day(self, *args):
+        global day
+        day = day.get()
 
-    def callback_day(day, *args):
-        print(day)
-
-    def callback_year(year, *args):
-        print(year)
-            
+    def callback_year(self, *args):
+        global year
+        year = year.get()
+    '''
+    
     def create_new_folder(self):
         global main_folder
         global current_folder
@@ -325,11 +329,11 @@ class sorting_gui(tk.Frame):
         global year
         global check_day
         
-        # month=month.get()
-        # day=day.get()
-        # year=year.get()
+        month_print=month.get()
+        day_print=day.get()
+        year_print=year.get()
             
-        newspaper_date='{m} {d}, {y}'.format(m=month, d=day, y=year)
+        newspaper_date='{m} {d}, {y}'.format(m=month_print, d=day_print, y=year_print)
         
         title = newspaper_title.get()
 
